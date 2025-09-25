@@ -1,5 +1,4 @@
 #include "IGEnemy.h"
-
 #include "IGGameManager.h"
 #include "IGMathEquations.h"
 

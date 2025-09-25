@@ -1,5 +1,4 @@
 #include "IGGameManager.h"
-
 #include "IGEnemy.h"
 
 AIGGameManager::AIGGameManager()
