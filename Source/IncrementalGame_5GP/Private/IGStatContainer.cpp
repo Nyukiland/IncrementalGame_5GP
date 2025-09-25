@@ -1,7 +1,20 @@
 #include "IGStatContainer.h"
-#include "IGCapacityEffect.h"
 
-void UIGCapacityEffect::ApplyEffect_Implementation(AActor* Source, AActor* Target)
+void UIGStatContainer::Init()
 {
+}
 
+bool UIGStatContainer::CheckIfCanUpgrade(float Money)
+{
+	return false;
+}
+
+void UIGStatContainer::Upgrade()
+{
+	
+}
+
+bool UIGStatContainer::TryUpgrade(float Money)
+{
+	return false;
 }

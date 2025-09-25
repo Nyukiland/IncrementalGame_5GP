@@ -37,7 +37,7 @@ bool UIGCapacityComponent::CheckTriggers()
 		if (!Trigger) continue;
 
 		TriggerCount++;
-		//if (Trigger->TriggerReady) TriggerValid++;
+		if (Trigger->TriggerReady) TriggerValid++;
 	}
 
 	return TriggerValid == TriggerCount;
@@ -61,7 +61,7 @@ void UIGCapacityComponent::TickStateComponent_Implementation(float DeltaTime)
 	for (UIGCapacityTrigger* Trigger : Triggers)
 	{
 		if (!Trigger) continue;
-		//Trigger->TickTrigger(DeltaTime);
+		Trigger->TickTrigger(DeltaTime);
 	}
 
 	if (CheckTriggers())
@@ -70,7 +70,7 @@ void UIGCapacityComponent::TickStateComponent_Implementation(float DeltaTime)
 		for (UIGCapacityTrigger* Trigger : Triggers)
 		{
 			if (!Trigger) continue;
-			//Trigger->ResetTrigger();
+			Trigger->ResetTrigger();
 		}
 	}
 }

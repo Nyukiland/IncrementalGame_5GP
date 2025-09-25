@@ -1,14 +1,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Subsystems/WorldSubsystem.h"
 #include "IGGameManager.generated.h"
 
 class AIGEnemy;
 class UIGMathEquations;
 
 UCLASS(Blueprintable)
-class INCREMENTALGAME_5GP_API AIGGameManager : public AActor
+class INCREMENTALGAME_5GP_API UIGGameManager : public UWorldSubsystem, public FTickableGameObject
 {
 	GENERATED_BODY()
 	
@@ -38,12 +38,14 @@ protected:
 	float Timer;
 
 public:	
-	AIGGameManager();
 	virtual void Tick(float DeltaTime) override;
 	void EnemyWentInactive(AIGEnemy* Enemy);
+	virtual bool IsTickable() const override { return true; }
+	virtual TStatId GetStatId() const override;
+
 	
 protected:
-	virtual void BeginPlay() override;
+	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
 
 private:
 	void SpawnEnemy();

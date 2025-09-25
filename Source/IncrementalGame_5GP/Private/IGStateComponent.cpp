@@ -5,7 +5,7 @@ UIGStateComponent::UIGStateComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UIGStateComponent::InitStateComponent_Implementation(AIGGameController* Controller)
+void UIGStateComponent::InitStateComponent_Implementation(AIGPlayer* Controller)
 {
 	Owner = Controller;
 }

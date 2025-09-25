@@ -5,7 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "IGEnemy.generated.h"
 
-class AIGGameManager;
+class UIGGameManager;
 class UIGMathEquations;
 class UIGStatus;
 
@@ -38,18 +38,17 @@ protected:
 	
 private:
 	UPROPERTY()
-	TObjectPtr<AIGGameManager> Manager;
+	TObjectPtr<UIGGameManager> Manager;
 
 public:
 	AIGEnemy();
 
 	virtual void BeginPlay() override;
-	void InitEnemy(AIGGameManager* GameManager);
+	void InitEnemy(UIGGameManager* GameManager);
 	void EnableEnemy(FVector StartPos, FVector Direction, float Time);
-	virtual void Tick(float DeltaTime);
+	virtual void Tick(float DeltaTime) override;
 	void TakeDamage(float Damage);
 
 private:
 	void DisableEnemy();
-	
 };

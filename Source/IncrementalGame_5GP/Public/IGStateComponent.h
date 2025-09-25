@@ -4,7 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "IGStateComponent.generated.h"
 
-class AIGGameController;
+class AIGPlayer;
 
 UCLASS(Abstract, Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class INCREMENTALGAME_5GP_API UIGStateComponent : public UActorComponent
@@ -12,14 +12,14 @@ class INCREMENTALGAME_5GP_API UIGStateComponent : public UActorComponent
 	GENERATED_BODY()
 
 protected:
-	TObjectPtr<AIGGameController> Owner;
+	TObjectPtr<AIGPlayer> Owner;
 
 public:	
 	UIGStateComponent();
 
 	UFUNCTION(BlueprintNativeEvent, Category = "State")
-	void InitStateComponent(AIGGameController* Controller);
-	virtual void InitStateComponent_Implementation(AIGGameController* Controller);
+	void InitStateComponent(AIGPlayer* Controller);
+	virtual void InitStateComponent_Implementation(AIGPlayer* Controller);
 
 	UFUNCTION(BlueprintNativeEvent, Category = "State")
 	void EnableStateComponent();

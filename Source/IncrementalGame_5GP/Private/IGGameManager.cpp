@@ -1,15 +1,8 @@
 #include "IGGameManager.h"
 #include "IGEnemy.h"
 
-AIGGameManager::AIGGameManager()
+void UIGGameManager::Tick(float DeltaTime)
 {
-	PrimaryActorTick.bCanEverTick = true;
-}
-
-void AIGGameManager::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 	Timer += DeltaTime;
 
 	if (Timer >= CurrentEnemySpawnRate)
@@ -19,7 +12,7 @@ void AIGGameManager::Tick(float DeltaTime)
 	}
 }
 
-void AIGGameManager::EnemyWentInactive(AIGEnemy* Enemy)
+void UIGGameManager::EnemyWentInactive(AIGEnemy* Enemy)
 {
 	int Index = FindEnemyIndexInList(Enemy);
 
@@ -33,12 +26,12 @@ void AIGGameManager::EnemyWentInactive(AIGEnemy* Enemy)
 	CurrentEnemiesActive--;
 }
 
-void AIGGameManager::BeginPlay()
+void UIGGameManager::OnWorldBeginPlay(UWorld& InWorld)
 {
-	Super::BeginPlay();
+	Super::OnWorldBeginPlay(InWorld);
 }
 
-void AIGGameManager::SpawnEnemy()
+void UIGGameManager::SpawnEnemy()
 {
 	if (!EnemyToSpawn)
 	{
@@ -61,7 +54,7 @@ void AIGGameManager::SpawnEnemy()
 	CurrentEnemiesActive++;
 }
 
-int AIGGameManager::FindEnemyIndexInList(AIGEnemy* Enemy, bool bFindInAll, bool bClampToActive)
+int UIGGameManager::FindEnemyIndexInList(AIGEnemy* Enemy, bool bFindInAll, bool bClampToActive)
 {
 	if (!Enemy)
 	{
@@ -73,7 +66,7 @@ int AIGGameManager::FindEnemyIndexInList(AIGEnemy* Enemy, bool bFindInAll, bool 
 	int EndIndex = Enemies.Num();
 	
 	if (bFindInAll && bClampToActive)
-			EndIndex = CurrentEnemiesActive;
+		EndIndex = CurrentEnemiesActive;
 	else if (!bFindInAll)
 		StartIndex = CurrentEnemiesActive;
 
@@ -92,4 +85,9 @@ int AIGGameManager::FindEnemyIndexInList(AIGEnemy* Enemy, bool bFindInAll, bool 
 
 	UE_LOG(LogTemp, Error, TEXT("[GameManager] Enemy couldn't be found"))
 	return -1;
+}
+
+TStatId UIGGameManager::GetStatId() const
+{
+	RETURN_QUICK_DECLARE_CYCLE_STAT(UIGGameManager, STATGROUP_Tickables);
 }

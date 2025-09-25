@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "IGState.generated.h"
 
+class AIGPlayer;
 class AGameController;
 class UStateComponent;
 
@@ -13,12 +14,12 @@ class INCREMENTALGAME_5GP_API UIGState : public UObject
 
 protected:
 	UPROPERTY()
-	AGameController* Owner;
+	TObjectPtr<AIGPlayer> Owner;
 
 public:
 	UFUNCTION(BlueprintNativeEvent, Category = "State")
-	void OnEnter(AGameController* GameController);
-	virtual void OnEnter_Implementation(AGameController* GameController);
+	void OnEnter(AIGPlayer* GameController);
+	virtual void OnEnter_Implementation(AIGPlayer* GameController);
 	
 	UFUNCTION(BlueprintNativeEvent, Category = "State")
 	void OnExit();

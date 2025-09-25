@@ -5,6 +5,11 @@
 AIGEnemy::AIGEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	CurrentLife = 0;
+	CurrentDefenseValue = 0;
+	CurrentSpeed = 0;
+	CurrentDirection = FVector::ZeroVector;
+	bIsActive = false;
 }
 
 void AIGEnemy::BeginPlay()
@@ -12,7 +17,7 @@ void AIGEnemy::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AIGEnemy::InitEnemy(AIGGameManager* GameManager)
+void AIGEnemy::InitEnemy(UIGGameManager* GameManager)
 {
 	if (!Manager)
 	{
@@ -47,7 +52,7 @@ void AIGEnemy::Tick(float DeltaTime)
 void AIGEnemy::TakeDamage(float Damage)
 {
 	CurrentLife -= Damage;
-
+	
 	if (CurrentLife <= 0)
 		DisableEnemy();
 }
