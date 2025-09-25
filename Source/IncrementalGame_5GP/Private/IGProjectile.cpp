@@ -1,16 +1,29 @@
 #include "IGProjectile.h"
+#include "IGCapacityEffect.h"
 
 AIGProjectile::AIGProjectile()
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AIGProjectile::BeginPlay()
+bool AIGProjectile::CheckValidity()
 {
-	Super::BeginPlay();
+	if (Effects.Num() == 0)
+		return false;
+
+	return true;
 }
 
-void AIGProjectile::Tick(float DeltaTime)
+void AIGProjectile::DoEffects()
 {
-	Super::Tick(DeltaTime);
+	if (!CheckValidity())
+		return;
+
+	AActor* Source = GetTypedOuter<AActor>();
+
+	for (UIGCapacityEffect* Effect : Effects)
+	{
+		if (!Effect) continue;
+		Effect->ApplyEffect(Source, nullptr);
+	}
 }

@@ -4,17 +4,22 @@
 #include "GameFramework/Actor.h"
 #include "IGProjectile.generated.h"
 
+class UIGStatus;
+class UIGCapacityEffect;
+
 UCLASS()
 class INCREMENTALGAME_5GP_API AIGProjectile : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	AIGProjectile();
 
 protected:
-	virtual void BeginPlay() override;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Projectile")
+	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
 
-public:	
-	virtual void Tick(float DeltaTime) override;
+private:
+	bool CheckValidity();
+	void DoEffects();
 };

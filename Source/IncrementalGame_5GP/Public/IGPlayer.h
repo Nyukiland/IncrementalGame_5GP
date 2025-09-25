@@ -20,9 +20,9 @@ public:
 	TArray<TSubclassOf<UIGStateComponent>> DefaultActiveComponent;
 
 private:
-	TArray<UIGStateComponent*> StateComponents;
+	TArray<TObjectPtr<UIGStateComponent>> StateComponents;
 	int ActiveComponentCount = 0;
-	UIGState* CurrentState;
+	TObjectPtr<UIGState> CurrentState;
 
 protected:
 	virtual void BeginPlay() override;

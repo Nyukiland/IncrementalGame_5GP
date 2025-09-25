@@ -21,10 +21,10 @@ private:
 
 public:
 	UPROPERTY(EditAnywhere, Instanced, BlueprintReadOnly, Category = "Capacity")
-	TArray<UIGCapacityTrigger*> Triggers;
+	TArray<TObjectPtr<UIGCapacityTrigger>> Triggers;
 
 	UPROPERTY(EditAnywhere, Instanced, BlueprintReadOnly, Category = "Capacity")
-	TArray<UIGCapacityEffect*> Effects;
+	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
 
 	virtual void EnableStateComponent_Implementation() override;
 
