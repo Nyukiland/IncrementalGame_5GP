@@ -9,7 +9,7 @@ void UIGCapacityTrigger::TickTrigger_Implementation(float DeltaTime)
 
 void UIGCapacityTrigger::ResetTrigger_Implementation()
 {
-	TriggerReady = false;
+	bTriggerReady = false;
 }
 
 TArray<UIGStatContainer*> UIGCapacityTrigger::GetStats_Implementation()

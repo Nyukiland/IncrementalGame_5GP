@@ -37,7 +37,7 @@ bool UIGCapacityComponent::CheckTriggers()
 		if (!Trigger) continue;
 
 		TriggerCount++;
-		if (Trigger->TriggerReady) TriggerValid++;
+		if (Trigger->bTriggerReady) TriggerValid++;
 	}
 
 	return TriggerValid == TriggerCount;

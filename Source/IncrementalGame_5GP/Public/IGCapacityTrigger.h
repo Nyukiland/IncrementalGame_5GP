@@ -12,7 +12,7 @@ class INCREMENTALGAME_5GP_API UIGCapacityTrigger : public UObject
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity|Trigger")
-	bool TriggerReady = false;
+	bool bTriggerReady = false;
 
 public:
 	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Trigger")
