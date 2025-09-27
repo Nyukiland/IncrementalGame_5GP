@@ -4,7 +4,7 @@
 #include "IGMathEquations.h"
 #include "IGStatContainer.generated.h"
 
-UCLASS(Blueprintable, EditInlineNew, DefaultToInstanced)
+UCLASS(Blueprintable)
 class INCREMENTALGAME_5GP_API UIGStatContainer : public UObject
 {
 	GENERATED_BODY()

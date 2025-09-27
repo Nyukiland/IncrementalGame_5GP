@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "IGMathEquations.generated.h"
 
-UCLASS(Abstract, Blueprintable, EditInlineNew, DefaultToInstanced)
+UCLASS(Abstract, Blueprintable)
 class INCREMENTALGAME_5GP_API UIGMathEquations : public UObject
 {
 	GENERATED_BODY()

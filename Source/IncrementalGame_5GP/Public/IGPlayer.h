@@ -20,14 +20,16 @@ public:
 	TArray<TSubclassOf<UIGStateComponent>> DefaultActiveComponent;
 
 private:
+	UPROPERTY()
 	TArray<TObjectPtr<UIGStateComponent>> StateComponents;
 	int ActiveComponentCount = 0;
+	UPROPERTY()
 	TObjectPtr<UIGState> CurrentState;
 
 protected:
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

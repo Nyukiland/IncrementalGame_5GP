@@ -20,10 +20,10 @@ private:
 	bool CheckTriggers();
 
 public:
-	UPROPERTY(EditAnywhere, Instanced, BlueprintReadOnly, Category = "Capacity")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
 	TArray<TObjectPtr<UIGCapacityTrigger>> Triggers;
 
-	UPROPERTY(EditAnywhere, Instanced, BlueprintReadOnly, Category = "Capacity")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
 	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
 
 	virtual void EnableStateComponent_Implementation() override;

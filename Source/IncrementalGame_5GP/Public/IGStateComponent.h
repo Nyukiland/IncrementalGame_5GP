@@ -12,6 +12,7 @@ class INCREMENTALGAME_5GP_API UIGStateComponent : public UActorComponent
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY()
 	TObjectPtr<AIGPlayer> Owner;
 
 public:	

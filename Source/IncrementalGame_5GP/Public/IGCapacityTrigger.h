@@ -5,7 +5,7 @@
 
 class UIGStatContainer;
 
-UCLASS(Abstract, Blueprintable, EditInlineNew, DefaultToInstanced)
+UCLASS(Abstract, Blueprintable)
 class INCREMENTALGAME_5GP_API UIGCapacityTrigger : public UObject
 {
 	GENERATED_BODY()
