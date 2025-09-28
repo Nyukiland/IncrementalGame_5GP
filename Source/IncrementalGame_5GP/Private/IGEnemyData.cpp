@@ -1,4 +1,5 @@
 #include "IGEnemyData.h"
+#include "IGGameManager.h"
 
 void FEnemyData::ApplyDamage(float Damage)
 {

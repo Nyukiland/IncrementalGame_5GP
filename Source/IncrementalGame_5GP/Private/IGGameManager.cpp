@@ -4,6 +4,9 @@
 
 void UIGGameManager::Tick(float DeltaTime)
 {
+	if (CurrentZoneFrameInvincibility < MaxZoneFrameInvincibility)
+		CurrentZoneFrameInvincibility++;
+	
 	if (!EnemiesMeshInstances) return;
 
 	for (FEnemyData& Enemy : EnemiesData)
@@ -22,6 +25,8 @@ TStatId UIGGameManager::GetStatId() const
 void UIGGameManager::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
+
+	CurrentZoneFrameInvincibility = MaxZoneFrameInvincibility;
 }
 
 void UIGGameManager::InitializeEnemiesMeshInstances(UStaticMesh* Mesh, UMaterialInterface* Material)
@@ -51,11 +56,11 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 	FEnemyData NewEnemy;
 	NewEnemy.InstanceId = InstanceId;
 	NewEnemy.UpdatePosition(SpawnTransform);
-	
+
 	EnemiesData.Add(NewEnemy);
 	ActiveEnemiesIndices.Add(InstanceId);
 	EnemiesPositions.Add(SpawnTransform.GetLocation());
-	
+
 	NewEnemy.ActiveEnemiesIndices = &ActiveEnemiesIndices;
 	NewEnemy.EnemiesData = &EnemiesData;
 	NewEnemy.EnemiesPositions = &EnemiesPositions;
@@ -180,5 +185,25 @@ void UIGGameManager::RemoveFromGrid(int32 EnemyIndex, const FVector& Pos)
 		{
 			Grid.Remove(Cell);
 		}
+	}
+}
+
+void UIGGameManager::ChangeZoneSize(float ChangeFactor)
+{
+	if (ChangeFactor < 0)
+	{
+		if (CurrentZoneFrameInvincibility < MaxZoneFrameInvincibility)
+			return;
+
+		CurrentZoneFrameInvincibility = 0;
+	}
+	
+	CurrentZoneRadius += ChangeFactor;
+
+	CurrentZoneRadius = FMath::Clamp(CurrentZoneRadius, MinZoneRadius, MaxZoneRadius);
+
+	if (MinZoneRadius >= CurrentZoneRadius)
+	{
+		//End Game
 	}
 }

@@ -1,8 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "IGGameManager.h"
 #include "IGEnemyData.generated.h"
+
+class UIGGameManager;
 
 USTRUCT(BlueprintType)
 struct FEnemyData //can create with a simple var "FEnemyData Enemy"
