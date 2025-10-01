@@ -21,6 +21,6 @@ private:
 	UIGGameManager* Manager;
 	
 public:
-	virtual void ApplyEffect_Implementation(AActor* Source, AActor* Target) override;
+	virtual void ApplyEffect_Implementation(AIGPlayer* Player, FVector Target) override;
 	virtual TArray<UIGStatContainer*> GetStats_Implementation() override;
 };

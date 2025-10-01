@@ -2,7 +2,7 @@
 #include "IGGameManager.h"
 #include "IGStatContainer.h"
 
-void UIGHealEffect::ApplyEffect_Implementation(AActor* Source, AActor* Target)
+void UIGHealEffect::ApplyEffect_Implementation(AIGPlayer* Player, FVector Target)
 {
 	if (HealStat == nullptr)
 	{
@@ -11,7 +11,7 @@ void UIGHealEffect::ApplyEffect_Implementation(AActor* Source, AActor* Target)
 	}
 	
 	if (Manager == nullptr)
-		Manager = Source->GetWorld()->GetSubsystem<UIGGameManager>();
+		Manager = Player->GetWorld()->GetSubsystem<UIGGameManager>();
 
 	Manager->ChangeZoneSize(HealStat->CurrentValue);
 }

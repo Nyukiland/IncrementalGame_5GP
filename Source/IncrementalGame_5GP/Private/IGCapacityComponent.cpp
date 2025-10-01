@@ -18,12 +18,10 @@ void UIGCapacityComponent::ExecuteEffect()
 	if (!CheckValidity())
 		return;
 
-	AActor* Source = GetTypedOuter<AActor>();
-
 	for (UIGCapacityEffect* Effect : Effects)
 	{
 		if (!Effect) continue;
-		Effect->ApplyEffect(Source, nullptr);
+		Effect->ApplyEffect(Owner, FVector::ZeroVector);
 	}
 }
 

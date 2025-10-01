@@ -1,25 +1,17 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "UObject/NoExportTypes.h"
 #include "IGProjectile.generated.h"
 
-class UIGStatus;
-class UIGCapacityEffect;
-
+/**
+ * 
+ */
 UCLASS()
-class INCREMENTALGAME_5GP_API AIGProjectile : public AActor
+class INCREMENTALGAME_5GP_API UIGProjectile : public UObject
 {
 	GENERATED_BODY()
-
-public:
-	AIGProjectile();
-
-protected:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Projectile")
-	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
-
-private:
-	bool CheckValidity();
-	void DoEffects();
+	
 };
