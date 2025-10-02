@@ -66,9 +66,9 @@ public:
 	int32 SpawnEnemy(const FTransform& SpawnTransform);
 	FORCEINLINE FEnemyData& GetEnemy(int32 Index) { return EnemiesData[Index]; }
 
-	FEnemyData* GetFarthestEnemy();
-	FEnemyData* GetClosestEnemy();
-	FEnemyData* GetRandomEnemy();
+	int GetFarthestEnemy();
+	int GetClosestEnemy();
+	int GetRandomEnemy();
 
 	FIntPoint GetCellCoords(const FVector& Pos) const;
 	void InsertIntoGrid(int32 EnemyIndex, const FVector& Pos);

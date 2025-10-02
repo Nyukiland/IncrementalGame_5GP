@@ -71,12 +71,12 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 	return InstanceId;
 }
 
-FEnemyData* UIGGameManager::GetFarthestEnemy()
+int UIGGameManager::GetFarthestEnemy()
 {
-	if (ActiveEnemiesIndices.Num() == 0) return nullptr;
+	if (ActiveEnemiesIndices.Num() == 0) return -1;
 
 	FIntPoint StartCell = GetCellCoords(Origin);
-	FEnemyData* Farthest = nullptr;
+	int Farthest = -1;
 	float MaxDistSq = 0.f;
 
 	const int32 MaxRadius = 50; //arbitrary, needs testing
@@ -99,7 +99,7 @@ FEnemyData* UIGGameManager::GetFarthestEnemy()
 						if (DistSq > MaxDistSq)
 						{
 							MaxDistSq = DistSq;
-							Farthest = &EnemiesData[EnemyIdx];
+							Farthest = EnemyIdx;
 						}
 					}
 				}
@@ -110,13 +110,13 @@ FEnemyData* UIGGameManager::GetFarthestEnemy()
 	return Farthest;
 }
 
-FEnemyData* UIGGameManager::GetClosestEnemy()
+int UIGGameManager::GetClosestEnemy()
 {
-	if (ActiveEnemiesIndices.Num() == 0) return nullptr;
+	if (ActiveEnemiesIndices.Num() == 0) return -1;
 
 	FIntPoint StartCell = GetCellCoords(Origin);
 	float MinDistSq = TNumericLimits<float>::Max();
-	FEnemyData* Closest = nullptr;
+	int Closest = -1;
 
 	int32 SearchRadius = 0;
 	bool bFoundAny = false;
@@ -140,7 +140,7 @@ FEnemyData* UIGGameManager::GetClosestEnemy()
 						if (DistSq < MinDistSq)
 						{
 							MinDistSq = DistSq;
-							Closest = &EnemiesData[EnemyIdx];
+							Closest = EnemyIdx;
 							bFoundAny = true;
 						}
 					}
@@ -153,12 +153,12 @@ FEnemyData* UIGGameManager::GetClosestEnemy()
 	return Closest;
 }
 
-FEnemyData* UIGGameManager::GetRandomEnemy()
+int UIGGameManager::GetRandomEnemy()
 {
-	if (ActiveEnemiesIndices.Num() == 0) return nullptr;
+	if (ActiveEnemiesIndices.Num() == 0) return -1;
 
 	int32 RandomIndex = FMath::RandRange(0, ActiveEnemiesIndices.Num() - 1);
-	return &EnemiesData[ActiveEnemiesIndices[RandomIndex]];
+	return RandomIndex;
 }
 
 FIntPoint UIGGameManager::GetCellCoords(const FVector& Pos) const

@@ -15,32 +15,54 @@ bool UIGCapacityComponent::CheckValidity()
 	return true;
 }
 
-void UIGCapacityComponent::ExecuteEffect()
+bool UIGCapacityComponent::ExecuteEffect(float DeltaTime)
 {
 	if (!CheckValidity())
-		return;
+		return false;
 
+	int ValidEffectCount = 0;
+	
 	for (UIGCapacityEffect* Effect : Effects)
 	{
-		if (!Effect) continue;
+		if (!Effect || Effect->Timer >= Effect->Duration)
+		{
+			ValidEffectCount++;
+			continue;
+		}
+
+		if (Effect->Timer == -1)
+			Effect->Timer = 0;
+		else
+			Effect->Timer += DeltaTime;
+		
 		Effect->ApplyEffect(CapacityData);
+
+		if (Effect->bWaitToBeComplete)
+			return false;
 	}
+
+	return ValidEffectCount == Effects.Num();
 }
 
-bool UIGCapacityComponent::CheckTriggers()
+bool UIGCapacityComponent::CheckTriggers(float DeltaTime)
 {
-	int TriggerCount = 0;
+	if (!CheckValidity())
+		return false;
+	
 	int TriggerValid = 0;
 	
 	for (UIGCapacityTrigger* Trigger : Triggers)
 	{
-		if (!Trigger) continue;
+		if (!Trigger || Trigger->bTriggerReady)
+		{
+			TriggerValid++;
+			continue;
+		}
 
-		TriggerCount++;
-		if (Trigger->bTriggerReady) TriggerValid++;
+		Trigger->TickTrigger(DeltaTime);
 	}
 
-	return TriggerValid == TriggerCount;
+	return TriggerValid == Triggers.Num();
 }
 
 void UIGCapacityComponent::InitStateComponent_Implementation(AIGPlayer* Controller)
@@ -66,19 +88,20 @@ void UIGCapacityComponent::TickStateComponent_Implementation(float DeltaTime)
 	if (!CheckValidity())
 		return;
 
-	for (UIGCapacityTrigger* Trigger : Triggers)
+	if (CheckTriggers(DeltaTime))
 	{
-		if (!Trigger) continue;
-		Trigger->TickTrigger(DeltaTime);
-	}
-
-	if (CheckTriggers())
-	{
-		ExecuteEffect();
-		for (UIGCapacityTrigger* Trigger : Triggers)
+		if (ExecuteEffect(DeltaTime))
 		{
-			if (!Trigger) continue;
-			Trigger->ResetTrigger();
+			for (UIGCapacityTrigger* Trigger : Triggers)
+			{
+				if (!Trigger) continue;
+				Trigger->ResetTrigger();
+			}
+
+			for (UIGCapacityEffect* Effect : Effects)
+			{
+				Effect->Timer = -1;
+			}	
 		}
 	}
 }

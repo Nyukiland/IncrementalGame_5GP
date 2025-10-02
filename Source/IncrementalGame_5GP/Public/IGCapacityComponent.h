@@ -22,9 +22,9 @@ protected:
 private:
 	bool CheckValidity();
 
-	void ExecuteEffect();
+	bool ExecuteEffect(float DeltaTime);
 
-	bool CheckTriggers();
+	bool CheckTriggers(float DeltaTime);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")

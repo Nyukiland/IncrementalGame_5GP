@@ -12,6 +12,16 @@ class INCREMENTALGAME_5GP_API UIGCapacityEffect : public UObject
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity|Effect")
+	float Duration = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity|Effect")
+	bool bWaitToBeComplete = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Capacity|Effect")
+	float Timer = -1;
+	
+public:
 	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Effect")
 	void ApplyEffect(FCapacityData& CapacityData);
 	virtual void ApplyEffect_Implementation(FCapacityData& CapacityData);
