@@ -1,8 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "IGEnemyData.h"
-#include "IGPlayer.h"
+#include "IGCapacityData.h"
 #include "IGCapacityEffect.generated.h"
 
 class UIGStatContainer;
@@ -14,12 +13,8 @@ class INCREMENTALGAME_5GP_API UIGCapacityEffect : public UObject
 
 public:
 	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Effect")
-	void ApplyEffect(AIGPlayer* Player, FVector Target);
-	virtual void ApplyEffect_Implementation(AIGPlayer* Player, FVector Target);
-
-	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Effect")
-	void ApplyEffectToEnemy(AIGPlayer* Player, FEnemyData& Target);
-	virtual void ApplyEffectToEnemy_Implementation(AIGPlayer* Player, FEnemyData& Target);
+	void ApplyEffect(FCapacityData& CapacityData);
+	virtual void ApplyEffect_Implementation(FCapacityData& CapacityData);
 
 	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Effect")
 	TArray<UIGStatContainer*> GetStats();

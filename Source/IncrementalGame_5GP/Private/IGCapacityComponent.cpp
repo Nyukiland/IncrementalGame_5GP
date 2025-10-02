@@ -1,6 +1,8 @@
 #include "IGCapacityComponent.h"
 #include "IGCapacityTrigger.h"
 #include "IGCapacityEffect.h"
+#include "IGGameManager.h"
+#include "IGPlayer.h"
 
 bool UIGCapacityComponent::CheckValidity()
 {
@@ -21,7 +23,7 @@ void UIGCapacityComponent::ExecuteEffect()
 	for (UIGCapacityEffect* Effect : Effects)
 	{
 		if (!Effect) continue;
-		Effect->ApplyEffect(Owner, FVector::ZeroVector);
+		Effect->ApplyEffect(CapacityData);
 	}
 }
 
@@ -39,6 +41,14 @@ bool UIGCapacityComponent::CheckTriggers()
 	}
 
 	return TriggerValid == TriggerCount;
+}
+
+void UIGCapacityComponent::InitStateComponent_Implementation(AIGPlayer* Controller)
+{
+	Super::InitStateComponent_Implementation(Controller);
+
+	CapacityData.Manager = Controller->GetWorld()->GetSubsystem<UIGGameManager>();
+	CapacityData.Player = Controller;
 }
 
 void UIGCapacityComponent::EnableStateComponent_Implementation()

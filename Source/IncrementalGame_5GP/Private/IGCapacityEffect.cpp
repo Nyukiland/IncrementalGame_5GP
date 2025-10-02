@@ -2,12 +2,7 @@
 
 class UIGStatContainer;
 
-void UIGCapacityEffect::ApplyEffect_Implementation(AIGPlayer* Player, FVector Target)
-{
-	
-}
-
-void UIGCapacityEffect::ApplyEffectToEnemy_Implementation(AIGPlayer* Player, FEnemyData& Target)
+void UIGCapacityEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
 	
 }
