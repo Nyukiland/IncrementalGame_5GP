@@ -25,6 +25,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Enemy")
 	float CurrentEnemySpawnRate;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Enemy")
+	TObjectPtr<UIGMathEquations> EnemyHealth;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Enemy")
+	TObjectPtr<UIGMathEquations> EnemySpeed;
+
 	UPROPERTY(VisibleAnywhere)
 	UInstancedStaticMeshComponent* EnemiesMeshInstances;
 
@@ -32,11 +38,9 @@ protected:
 
 	TArray<int32> ActiveEnemiesIndices;
 
-	TArray<FVector> EnemiesPositions;
-
 	// central tower pos, can be replaced by a ref
 	FVector Origin;
-	int32 CellSize = 1000; //arbitrary, needs testing, can be modified at runtime depenting on the enemies density
+	int32 CellSize = 1000; //arbitrary, needs testing, can be modified at runtime depending on the enemies density
 	TMap<FIntPoint, TArray<int32>> Grid;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Zone")
@@ -56,6 +60,9 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Zone")
 	float MaxZoneFrameInvincibility = 5;
+
+	uint32 ClosestEnemyIndex;
+	uint32 FarthestEnemyIndex;
 	
 public:
 	virtual void Tick(float DeltaTime) override;
@@ -66,13 +73,9 @@ public:
 	int32 SpawnEnemy(const FTransform& SpawnTransform);
 	FORCEINLINE FEnemyData& GetEnemy(int32 Index) { return EnemiesData[Index]; }
 
-	int GetFarthestEnemy();
-	int GetClosestEnemy();
-	int GetRandomEnemy();
-
-	FIntPoint GetCellCoords(const FVector& Pos) const;
-	void InsertIntoGrid(int32 EnemyIndex, const FVector& Pos);
-	void RemoveFromGrid(int32 EnemyIndex, const FVector& Pos);
+	uint32 GetFarthestEnemy() const;
+	uint32 GetClosestEnemy() const;
+	uint32 GetRandomEnemy() const;
 
 	void ChangeZoneSize(float ChangeFactor);
 

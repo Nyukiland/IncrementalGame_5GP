@@ -1,13 +1,12 @@
 #include "IGEnemyData.h"
-#include "IGGameManager.h"
 
 void FEnemyData::ApplyDamage(float Damage)
 {
-	if (Life <= 0)
+	if (Health <= 0)
 		return;
 		
-	Life -= Damage;
-	if (Life <= 0) Death();
+	Health -= Damage;
+	if (Health <= 0) Death();
 }
 
 void FEnemyData::Death()
@@ -20,7 +19,7 @@ void FEnemyData::SetActive(bool bNewActive)
 	if (bIsActive_Internal == bNewActive)
 		return;
 	
-	if (!ActiveEnemiesIndices || !GameManager.IsValid())
+	if (!ActiveEnemiesIndices)
 		return;
 		
 	if (!EnemiesData->IsValidIndex(InstanceId))
@@ -32,28 +31,26 @@ void FEnemyData::SetActive(bool bNewActive)
 	{
 		if (!ActiveEnemiesIndices->Contains(InstanceId))
 			ActiveEnemiesIndices->Add(InstanceId);
-			
-		GameManager->InsertIntoGrid(InstanceId, Transform.GetLocation());
 	}
 	else
-	{
 		ActiveEnemiesIndices->Remove(InstanceId);
-		GameManager->RemoveFromGrid(InstanceId, Transform.GetLocation());
-	}
 }
 
-void FEnemyData::UpdatePosition(FTransform transform)
+void FEnemyData::Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed)
 {
-	Transform = transform;
-
-	// EnemiesPositions[InstanceId] = Transform.GetLocation();
-	//je n'arrive pas à update la position dans EnemiesPositions
+	Transform.SetLocation(Origin);
+	Health = BaseHealth;
+	Direction = BaseDirection;
+	Speed = BaseSpeed;
 }
 
-void FEnemyData::UpdatePosition(FVector position)
+void FEnemyData::UpdatePosition(float DeltaTime, int32& TempInstanceId, FTransform& TempTransform, float& TempDistanceFromOrigin)
 {
-	Transform.SetLocation(position);
-
-	//je n'arrive pas à update la position dans EnemiesPositions
-	// EnemiesPositions[InstanceId] = position;
+	float elapsedDistance = DeltaTime * Speed;
+	DistanceFromOrigin += elapsedDistance;
+	Transform.AddToTranslation(Direction * elapsedDistance);
+	
+	TempInstanceId = InstanceId;
+	TempDistanceFromOrigin = DistanceFromOrigin;
+	TempTransform = Transform;
 }

@@ -1,5 +1,8 @@
+#include "Math/UnrealMathUtility.h"
 #include "IGGameManager.h"
 #include "IGEnemyData.h"
+#include "IGMathEquations.h"
+#include "IGMathHelper.h"
 #include "Components/InstancedStaticMeshComponent.h"
 
 void UIGGameManager::Tick(float DeltaTime)
@@ -9,11 +12,31 @@ void UIGGameManager::Tick(float DeltaTime)
 	
 	if (!EnemiesMeshInstances) return;
 
-	for (FEnemyData& Enemy : EnemiesData)
+	ClosestEnemyIndex = -1;
+	FarthestEnemyIndex = -1;
+	float ClosestEnemyDistance = BIG_NUMBER;
+	float FarthestEnemyDistance = -1;
+	
+	for (int i = 0; i < EnemiesData.Num(); i++)
 	{
-		if (!Enemy.IsActive()) continue;
+		if (!EnemiesData[i].IsActive()) continue;
 
-		// move enemies here
+		int32 EnemyInstanceId;
+		FTransform EnemyTransform;
+		float EnemyDistanceFromOrigin;
+		EnemiesData[i].UpdatePosition(DeltaTime, EnemyInstanceId, EnemyTransform, EnemyDistanceFromOrigin);
+		EnemiesMeshInstances->UpdateInstanceTransform(EnemyInstanceId, EnemyTransform, true, true, true);
+		
+		if (EnemyDistanceFromOrigin < ClosestEnemyDistance)
+		{
+			ClosestEnemyDistance = EnemyDistanceFromOrigin;
+			ClosestEnemyIndex = i;
+		}
+		else if (EnemyDistanceFromOrigin > FarthestEnemyDistance)
+		{
+			FarthestEnemyDistance = EnemyDistanceFromOrigin;
+			FarthestEnemyIndex = i;
+		}
 	}
 }
 
@@ -55,137 +78,39 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 
 	FEnemyData NewEnemy;
 	NewEnemy.InstanceId = InstanceId;
-	NewEnemy.UpdatePosition(SpawnTransform);
+	FVector BaseDirection = UIGMathHelper::GetRandomPointInCircle();
+	NewEnemy.Init(Origin + BaseDirection, EnemyHealth->GetValue(0), BaseDirection, EnemySpeed->GetValue(0));
+	EnemiesMeshInstances->UpdateInstanceTransform(NewEnemy.InstanceId, NewEnemy.Transform, true, true, true);
 
 	EnemiesData.Add(NewEnemy);
 	ActiveEnemiesIndices.Add(InstanceId);
-	EnemiesPositions.Add(SpawnTransform.GetLocation());
 
 	NewEnemy.ActiveEnemiesIndices = &ActiveEnemiesIndices;
 	NewEnemy.EnemiesData = &EnemiesData;
-	NewEnemy.EnemiesPositions = &EnemiesPositions;
-	NewEnemy.GameManager = this;
-
-	InsertIntoGrid(InstanceId, SpawnTransform.GetLocation());
 
 	return InstanceId;
 }
 
-int UIGGameManager::GetFarthestEnemy()
+uint32 UIGGameManager::GetFarthestEnemy() const
 {
 	if (ActiveEnemiesIndices.Num() == 0) return -1;
 
-	FIntPoint StartCell = GetCellCoords(Origin);
-	int Farthest = -1;
-	float MaxDistSq = 0.f;
-
-	const int32 MaxRadius = 50; //arbitrary, needs testing
-	for (int32 SearchRadius = MaxRadius; SearchRadius >= 0; --SearchRadius)
-	{
-		for (int dx = -SearchRadius; dx <= SearchRadius; dx++)
-		{
-			for (int dy = -SearchRadius; dy <= SearchRadius; dy++)
-			{
-				if (FMath::Abs(dx) != SearchRadius && FMath::Abs(dy) != SearchRadius)
-					continue;
-
-				FIntPoint Cell = StartCell + FIntPoint(dx, dy);
-				if (const TArray<int32>* CellArray = Grid.Find(Cell))
-				{
-					for (int32 EnemyIdx : *CellArray)
-					{
-						const FVector& Pos = EnemiesPositions[EnemyIdx];
-						float DistSq = FVector::DistSquared2D(Pos, Origin);
-						if (DistSq > MaxDistSq)
-						{
-							MaxDistSq = DistSq;
-							Farthest = EnemyIdx;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return Farthest;
+	return ClosestEnemyIndex;
 }
 
-int UIGGameManager::GetClosestEnemy()
+uint32 UIGGameManager::GetClosestEnemy() const
 {
 	if (ActiveEnemiesIndices.Num() == 0) return -1;
 
-	FIntPoint StartCell = GetCellCoords(Origin);
-	float MinDistSq = TNumericLimits<float>::Max();
-	int Closest = -1;
-
-	int32 SearchRadius = 0;
-	bool bFoundAny = false;
-
-	while (!bFoundAny && SearchRadius < 50)
-	{
-		for (int dx = -SearchRadius; dx <= SearchRadius; dx++)
-		{
-			for (int dy = -SearchRadius; dy <= SearchRadius; dy++)
-			{
-				if (FMath::Abs(dx) != SearchRadius && FMath::Abs(dy) != SearchRadius)
-					continue;
-
-				FIntPoint Cell = StartCell + FIntPoint(dx, dy);
-				if (const TArray<int32>* CellArray = Grid.Find(Cell))
-				{
-					for (int32 EnemyIdx : *CellArray)
-					{
-						const FVector& Pos = EnemiesPositions[EnemyIdx];
-						float DistSq = FVector::DistSquared2D(Pos, Origin);
-						if (DistSq < MinDistSq)
-						{
-							MinDistSq = DistSq;
-							Closest = EnemyIdx;
-							bFoundAny = true;
-						}
-					}
-				}
-			}
-		}
-		SearchRadius++;
-	}
-
-	return Closest;
+	return FarthestEnemyIndex;
 }
 
-int UIGGameManager::GetRandomEnemy()
+uint32 UIGGameManager::GetRandomEnemy() const
 {
 	if (ActiveEnemiesIndices.Num() == 0) return -1;
 
 	int32 RandomIndex = FMath::RandRange(0, ActiveEnemiesIndices.Num() - 1);
 	return RandomIndex;
-}
-
-FIntPoint UIGGameManager::GetCellCoords(const FVector& Pos) const
-{
-	return FIntPoint(
-		FMath::FloorToInt(Pos.X / CellSize),
-		FMath::FloorToInt(Pos.Y / CellSize)
-	);
-}
-
-void UIGGameManager::InsertIntoGrid(int32 EnemyIndex, const FVector& Pos)
-{
-	FIntPoint Cell = GetCellCoords(Pos);
-	Grid.FindOrAdd(Cell).Add(EnemyIndex);
-}
-
-void UIGGameManager::RemoveFromGrid(int32 EnemyIndex, const FVector& Pos)
-{
-	FIntPoint Cell = GetCellCoords(Pos);
-	if (TArray<int32>* CellArray = Grid.Find(Cell))
-	{
-		CellArray->RemoveSwap(EnemyIndex);
-		if (CellArray->Num() == 0)
-		{
-			Grid.Remove(Cell);
-		}
-	}
 }
 
 void UIGGameManager::ChangeZoneSize(float ChangeFactor)

@@ -11,24 +11,25 @@ struct FEnemyData //can create with a simple var "FEnemyData Enemy"
 	GENERATED_BODY()
 
 private:
-	float Life = 0;
+	float Health = 0;
 	bool bIsActive_Internal = true;
-	FTransform Transform;
+	FVector Direction;
+	float Speed;
 
 public:
+	FTransform Transform;
 	
 	int32 InstanceId = INDEX_NONE;
+	float DistanceFromOrigin;
 
 	TArray<int32>* ActiveEnemiesIndices;
 	TArray<FEnemyData>* EnemiesData;
-	TArray<FVector>* EnemiesPositions;
-	TWeakObjectPtr<UIGGameManager> GameManager;
 	
 public:
 	void ApplyDamage(float Damage);
 	void Death();
 	void SetActive(bool bNewActive);
 	bool IsActive() const { return bIsActive_Internal; }
-	void UpdatePosition(FTransform transform);
-	void UpdatePosition(FVector position);
+	void Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed);
+	void UpdatePosition(float DeltaTime, int32& InstanceId, FTransform& Transform, float& EnemyDistanceFromOrigin);
 };
