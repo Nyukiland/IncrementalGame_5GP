@@ -16,8 +16,9 @@ void FEnemyData::Death()
 
 void FEnemyData::SetActive(bool bNewActive)
 {
-	if (bIsActive_Internal == bNewActive)
-		return;
+	// It might be better not to make that condition, it could be a problem at init
+	// if (bIsActive_Internal == bNewActive)
+	//		return;
 	
 	if (!ActiveEnemiesIndices)
 		return;
@@ -31,17 +32,36 @@ void FEnemyData::SetActive(bool bNewActive)
 	{
 		if (!ActiveEnemiesIndices->Contains(InstanceId))
 			ActiveEnemiesIndices->Add(InstanceId);
+		if (InactiveEnemiesIndices->Contains(InstanceId))
+			InactiveEnemiesIndices->Remove(InstanceId);
 	}
 	else
-		ActiveEnemiesIndices->Remove(InstanceId);
+		if (ActiveEnemiesIndices->Contains(InstanceId))
+			ActiveEnemiesIndices->Remove(InstanceId);
+		if (!InactiveEnemiesIndices->Contains(InstanceId))
+			InactiveEnemiesIndices->Add(InstanceId);
 }
 
-void FEnemyData::Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed)
+void FEnemyData::Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed, int32 BaseInstanceId)
 {
 	Transform.SetLocation(Origin);
 	Health = BaseHealth;
 	Direction = BaseDirection;
 	Speed = BaseSpeed;
+	InstanceId = BaseInstanceId;
+
+	SetActive(true);
+}
+
+void FEnemyData::Kill()
+{
+	Transform = FTransform::Identity;
+	Health = 0;
+	Direction = FVector::ZeroVector;
+	Speed = 0;
+	InstanceId = -1;
+
+	SetActive(false);
 }
 
 void FEnemyData::UpdatePosition(float DeltaTime, int32& TempInstanceId, FTransform& TempTransform, float& TempDistanceFromOrigin)

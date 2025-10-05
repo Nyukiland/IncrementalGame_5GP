@@ -1,5 +1,5 @@
-#include "Math/UnrealMathUtility.h"
 #include "IGGameManager.h"
+#include "Math/UnrealMathUtility.h"
 #include "IGEnemyData.h"
 #include "IGMathEquations.h"
 #include "IGMathHelper.h"
@@ -74,21 +74,42 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 {
 	if (!EnemiesMeshInstances) return INDEX_NONE;
 
+	int32 NewEnemyIndex;
+	if (InactiveEnemiesIndices.Num() <= 0)
+		// New enemy
+		NewEnemyIndex = EnemiesData.AddDefaulted();
+	else
+		// Pooled enemy
+		NewEnemyIndex = InactiveEnemiesIndices.Pop();
+	
 	int32 InstanceId = EnemiesMeshInstances->AddInstance(SpawnTransform);
-
-	FEnemyData NewEnemy;
-	NewEnemy.InstanceId = InstanceId;
+	if (InstanceId < 0)
+	{
+		// failure, we put the index back into inactives
+		if (NewEnemyIndex != INDEX_NONE)
+		{
+			InactiveEnemiesIndices.Add(NewEnemyIndex);
+		}
+		return INDEX_NONE;
+	}
+	
 	FVector BaseDirection = UIGMathHelper::GetRandomPointInCircle();
-	NewEnemy.Init(Origin + BaseDirection, EnemyHealth->GetValue(0), BaseDirection, EnemySpeed->GetValue(0));
-	EnemiesMeshInstances->UpdateInstanceTransform(NewEnemy.InstanceId, NewEnemy.Transform, true, true, true);
-
-	EnemiesData.Add(NewEnemy);
-	ActiveEnemiesIndices.Add(InstanceId);
-
-	NewEnemy.ActiveEnemiesIndices = &ActiveEnemiesIndices;
-	NewEnemy.EnemiesData = &EnemiesData;
+	FEnemyData& NewEnemyData = EnemiesData[NewEnemyIndex];
+	NewEnemyData.Init(Origin + BaseDirection, EnemyHealth->GetValue(0), BaseDirection, EnemySpeed->GetValue(0), InstanceId);
+	NewEnemyData.ActiveEnemiesIndices = &ActiveEnemiesIndices;
+	NewEnemyData.InactiveEnemiesIndices = &InactiveEnemiesIndices;
+	NewEnemyData.EnemiesData = &EnemiesData;
+	
+	EnemiesMeshInstances->UpdateInstanceTransform(InstanceId, NewEnemyData.Transform, true, true, true);
 
 	return InstanceId;
+}
+
+void UIGGameManager::KillEnemy(int EnemyIndex)
+{
+	FEnemyData EnemyToKill = GetEnemy(EnemyIndex);
+	EnemiesMeshInstances->RemoveInstance(EnemyToKill.InstanceId);
+	EnemyToKill.Kill();
 }
 
 uint32 UIGGameManager::GetFarthestEnemy() const

@@ -37,6 +37,7 @@ protected:
 	TArray<FEnemyData> EnemiesData;
 
 	TArray<int32> ActiveEnemiesIndices;
+	TArray<int32> InactiveEnemiesIndices;
 
 	// central tower pos, can be replaced by a ref
 	FVector Origin;
@@ -71,6 +72,7 @@ public:
 
 	void InitializeEnemiesMeshInstances(UStaticMesh* Mesh, UMaterialInterface* Material);
 	int32 SpawnEnemy(const FTransform& SpawnTransform);
+	void KillEnemy(int EnemyIndex);
 	FORCEINLINE FEnemyData& GetEnemy(int32 Index) { return EnemiesData[Index]; }
 
 	uint32 GetFarthestEnemy() const;

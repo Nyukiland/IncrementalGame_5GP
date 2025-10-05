@@ -13,8 +13,8 @@ struct FEnemyData //can create with a simple var "FEnemyData Enemy"
 private:
 	float Health = 0;
 	bool bIsActive_Internal = true;
-	FVector Direction;
-	float Speed;
+	FVector Direction = FVector(0, 0, 0);
+	float Speed = 0;
 
 public:
 	FTransform Transform;
@@ -23,13 +23,17 @@ public:
 	float DistanceFromOrigin;
 
 	TArray<int32>* ActiveEnemiesIndices;
+	TArray<int32>* InactiveEnemiesIndices;
 	TArray<FEnemyData>* EnemiesData;
+
+private:
+	void SetActive(bool bNewActive);
 	
 public:
 	void ApplyDamage(float Damage);
 	void Death();
-	void SetActive(bool bNewActive);
 	bool IsActive() const { return bIsActive_Internal; }
-	void Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed);
+	void Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed, int32 InstanceId);
+	void Kill();
 	void UpdatePosition(float DeltaTime, int32& InstanceId, FTransform& Transform, float& EnemyDistanceFromOrigin);
 };
