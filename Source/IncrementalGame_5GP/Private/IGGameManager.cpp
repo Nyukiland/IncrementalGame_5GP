@@ -50,6 +50,11 @@ void UIGGameManager::OnWorldBeginPlay(UWorld& InWorld)
 	Super::OnWorldBeginPlay(InWorld);
 
 	CurrentZoneFrameInvincibility = MaxZoneFrameInvincibility;
+
+	EnemiesMeshInstances = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("InstancedMesh"));
+	//EnemiesMeshInstances->SetStaticMesh(MyMesh);
+	EnemiesMeshInstances->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	EnemiesMeshInstances->SetCollisionProfileName(TEXT("EnemyOnly"));
 }
 
 void UIGGameManager::InitializeEnemiesMeshInstances(UStaticMesh* Mesh, UMaterialInterface* Material)
