@@ -1,5 +1,7 @@
 #include "IGGetEnemiesInAreaEffect.h"
 #include "IGGameManager.h"
+#include "IGStatContainer.h"
+#include "Components/InstancedStaticMeshComponent.h"
 
 void UIGGetEnemiesInAreaEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
@@ -9,5 +11,26 @@ void UIGGetEnemiesInAreaEffect::ApplyEffect_Implementation(FCapacityData& Capaci
 		return;
 	}
 
-	//TO DO
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Params;
+	Params.bReturnPhysicalMaterial = false;
+
+	GetWorld()->SweepMultiByChannel(
+		HitResults,
+		CapacityData.CurrentAimPositon,
+		CapacityData.CurrentAimPositon,
+		FQuat::Identity,
+		ECC_Pawn,
+		FCollisionShape::MakeSphere(AreaSize->CurrentValue),
+		Params
+	);
+
+	for (const FHitResult& Result : HitResults)
+	{
+		if (UInstancedStaticMeshComponent* ISM = Cast<UInstancedStaticMeshComponent>(Result.Component))
+		{
+			int32 InstanceIndex = Result.Item;
+			UE_LOG(LogTemp, Log, TEXT("Hit instance %d on %s \n get enemy from instance need to be configured"), InstanceIndex, *ISM->GetName());
+		}
+	}
 }

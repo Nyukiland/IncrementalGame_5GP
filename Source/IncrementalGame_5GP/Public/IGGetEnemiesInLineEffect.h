@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "IGCapacityEffect.h"
-#include "IGGetEnemiesInLine.generated.h"
+#include "IGGetEnemiesInLineEffect.generated.h"
 
 UCLASS()
-class INCREMENTALGAME_5GP_API UIGGetEnemiesInLine : public UIGCapacityEffect
+class INCREMENTALGAME_5GP_API UIGGetEnemiesInLineEffect : public UIGCapacityEffect
 {
 	GENERATED_BODY()
 

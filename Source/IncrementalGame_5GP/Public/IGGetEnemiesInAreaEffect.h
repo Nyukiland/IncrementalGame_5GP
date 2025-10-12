@@ -10,5 +10,9 @@ class INCREMENTALGAME_5GP_API UIGGetEnemiesInAreaEffect : public UIGCapacityEffe
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Area Effect")\
+	TObjectPtr<UIGStatContainer> AreaSize;
+	
+public:
 	virtual void ApplyEffect_Implementation(FCapacityData& CapacityData) override;
 };

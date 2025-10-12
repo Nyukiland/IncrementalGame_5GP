@@ -1,15 +1,13 @@
-#include "IGGetEnemiesInLine.h"
+#include "IGGetEnemiesInLineEffect.h"
 #include "Components/InstancedStaticMeshComponent.h"
 
-void UIGGetEnemiesInLine::ApplyEffect_Implementation(FCapacityData& CapacityData)
+void UIGGetEnemiesInLineEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
 	if (!CapacityData.Manager)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[IGGetEnemiesInLine] CapacityData.Manager is not set"));
 		return;
 	}
-
-	float Radius = ToleranceRadius;
 
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams Params;
@@ -21,21 +19,16 @@ void UIGGetEnemiesInLine::ApplyEffect_Implementation(FCapacityData& CapacityData
 		CapacityData.CurrentAimPositon,
 		FQuat::Identity,
 		ECC_Pawn,
-		FCollisionShape::MakeSphere(Radius),
+		FCollisionShape::MakeSphere(ToleranceRadius),
 		Params
 	);
 
 	for (const FHitResult& Result : HitResults)
 	{
-		if (AActor* HitActor = Result.GetActor())
-		{
-			UE_LOG(LogTemp, Log, TEXT("Hit Actor: %s"), *HitActor->GetName());
-		}
-
 		if (UInstancedStaticMeshComponent* ISM = Cast<UInstancedStaticMeshComponent>(Result.Component))
 		{
 			int32 InstanceIndex = Result.Item;
-			UE_LOG(LogTemp, Log, TEXT("Hit instance %d on %s"), InstanceIndex, *ISM->GetName());
+			UE_LOG(LogTemp, Log, TEXT("Hit instance %d on %s \n get enemy from instance need to be configured"), InstanceIndex, *ISM->GetName());
 		}
 	}
 }

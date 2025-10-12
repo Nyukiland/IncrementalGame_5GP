@@ -1,12 +1,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IGStatus.h"
 #include "IGEnemyData.generated.h"
 
 class UIGGameManager;
 
 USTRUCT(BlueprintType)
-struct FEnemyData //can create with a simple var "FEnemyData Enemy"
+struct FEnemyData
 {
 	GENERATED_BODY()
 
@@ -26,6 +27,9 @@ public:
 	TArray<int32>* InactiveEnemiesIndices;
 	TArray<FEnemyData>* EnemiesData;
 
+	TArray<FStatus> Statuses;
+	TMap<FName, int> StatusCount;
+
 private:
 	void SetActive(bool bNewActive);
 	
@@ -36,4 +40,5 @@ public:
 	void Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed, int32 InstanceId);
 	void Kill();
 	void UpdatePosition(float DeltaTime, int32& InstanceId, FTransform& Transform, float& EnemyDistanceFromOrigin);
+	void AddStatus(FStatus NewStatus);
 };
