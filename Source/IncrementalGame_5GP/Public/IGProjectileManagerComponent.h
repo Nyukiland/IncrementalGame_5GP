@@ -1,17 +1,58 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "IGCapacityComponent.h"
 #include "IGProjectileManagerComponent.generated.h"
 
-/**
- * 
- */
+USTRUCT(BlueprintType, Blueprintable)
+struct FProjectileData
+{
+	GENERATED_BODY()
+
+public:
+	FString ID;
+	int Instance;
+
+private:
+	float Timer;
+	FVector StartPos;
+	FVector EndPos;
+
+	FVector StartScale;
+	FVector EndScale;
+
+	FRotator Rotation;
+
+	float Duration;
+	float Hold;
+	
+public:
+	FProjectileData();
+	FProjectileData(FString Identifier, int InstanceIndex, FVector Start, FVector End, float DurationValue);
+	FProjectileData(FString Identifier, int InstanceIndex, FVector Start, FVector End, FVector ScaleStart, FVector ScaleEnd, float DurationValue, float HoldValue);
+
+	bool Update(float DeltaTime, FVector& CurrentPos, FVector& CurrentScale, FRotator& CurrentRotation);
+};
+
 UCLASS()
 class INCREMENTALGAME_5GP_API UIGProjectileManagerComponent : public UIGCapacityComponent
 {
 	GENERATED_BODY()
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile Manager")
+	TObjectPtr<UStaticMesh> ProjectileMesh;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Manager")
+	TObjectPtr<UInstancedStaticMeshComponent> ProjectileMeshInstances;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Manager")
+	TArray<FProjectileData> ProjectilesDatas;
+	
+public:
+	virtual void InitStateComponent_Implementation(AIGPlayer* Controller) override;
+	virtual void EnableStateComponent_Implementation() override;
+	virtual void TickStateComponent_Implementation(float DeltaTime) override;
+
+	void AddProjectile(FString ID, FVector Start, FVector End, float DurationValue, FColor Color);
 };
