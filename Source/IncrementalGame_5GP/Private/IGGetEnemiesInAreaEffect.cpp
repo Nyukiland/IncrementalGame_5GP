@@ -20,7 +20,7 @@ void UIGGetEnemiesInAreaEffect::ApplyEffect_Implementation(FCapacityData& Capaci
 		CapacityData.CurrentAimPositon,
 		CapacityData.CurrentAimPositon,
 		FQuat::Identity,
-		ECC_Pawn,
+		ECC_GameTraceChannel1,
 		FCollisionShape::MakeSphere(AreaSize->CurrentValue),
 		Params
 	);
@@ -33,4 +33,11 @@ void UIGGetEnemiesInAreaEffect::ApplyEffect_Implementation(FCapacityData& Capaci
 			UE_LOG(LogTemp, Log, TEXT("Hit instance %d on %s \n get enemy from instance need to be configured"), InstanceIndex, *ISM->GetName());
 		}
 	}
+}
+
+TArray<UIGStatContainer*> UIGGetEnemiesInAreaEffect::GetStats_Implementation()
+{
+	TArray<UIGStatContainer*> Stats;
+	Stats.Add(AreaSize);
+	return Stats;
 }

@@ -18,7 +18,7 @@ void UIGGetEnemiesInLineEffect::ApplyEffect_Implementation(FCapacityData& Capaci
 		CapacityData.PreviousAimPosition,
 		CapacityData.CurrentAimPositon,
 		FQuat::Identity,
-		ECC_Pawn,
+		ECC_GameTraceChannel1,
 		FCollisionShape::MakeSphere(ToleranceRadius),
 		Params
 	);
