@@ -11,17 +11,22 @@ class INCREMENTALGAME_5GP_API UIGStatContainer : public UObject
 
 private:
 	int CurrentUpgradeCount = 0;
-
+	
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FName Name = "Name";
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TObjectPtr<UIGMathEquations> UpgradeEquation;
+	TSubclassOf<UIGMathEquations> UpgradeEquationSubClass;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TObjectPtr<UIGMathEquations> PriceEquation;
+	TSubclassOf<UIGMathEquations> PriceEquationSubClass;
 
+	UPROPERTY()
+	TObjectPtr<UIGMathEquations> UpgradeEquation;
+	UPROPERTY()
+	TObjectPtr<UIGMathEquations> PriceEquation;
+	
 public:
 	float CurrentValue;
 	float CurrentPrice;

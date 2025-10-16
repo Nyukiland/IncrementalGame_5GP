@@ -1,6 +1,14 @@
 #include "IGTimerTrigger.h"
 #include "IGStatContainer.h"
 
+void UIGTimerTrigger::InitTrigger_Implementation()
+{
+	Super::InitTrigger_Implementation();
+
+	MaxTimer = NewObject<UIGStatContainer>(this, MaxTimerSubClass);
+	MaxTimer->Init();
+}
+
 void UIGTimerTrigger::TickTrigger_Implementation(float DeltaTime)
 {
 	Timer += DeltaTime;

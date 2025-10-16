@@ -19,6 +19,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Capacity")
 	FCapacityData CapacityData;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
+	TArray<TSubclassOf<UIGCapacityTrigger>> TriggersSubClass;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
+	TArray<TSubclassOf<UIGCapacityEffect>> EffectsSubClass;
+	
 private:
 	bool CheckValidity();
 
@@ -28,9 +34,10 @@ private:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
+	float Price;
+	
 	TArray<TObjectPtr<UIGCapacityTrigger>> Triggers;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
 	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
 
 	virtual void InitStateComponent_Implementation(AIGPlayer* Controller) override;

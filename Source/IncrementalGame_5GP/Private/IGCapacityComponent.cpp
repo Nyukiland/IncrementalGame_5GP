@@ -21,7 +21,7 @@ bool UIGCapacityComponent::ExecuteEffect(float DeltaTime)
 		return false;
 
 	int ValidEffectCount = 0;
-	
+
 	for (UIGCapacityEffect* Effect : Effects)
 	{
 		if (!Effect || Effect->Timer >= Effect->Duration)
@@ -34,7 +34,7 @@ bool UIGCapacityComponent::ExecuteEffect(float DeltaTime)
 			Effect->Timer = 0;
 		else
 			Effect->Timer += DeltaTime;
-		
+
 		Effect->ApplyEffect(CapacityData);
 
 		if (Effect->bWaitToBeComplete)
@@ -48,9 +48,9 @@ bool UIGCapacityComponent::CheckTriggers(float DeltaTime)
 {
 	if (!CheckValidity())
 		return false;
-	
+
 	int TriggerValid = 0;
-	
+
 	for (UIGCapacityTrigger* Trigger : Triggers)
 	{
 		if (!Trigger || Trigger->bTriggerReady)
@@ -69,18 +69,38 @@ void UIGCapacityComponent::InitStateComponent_Implementation(AIGPlayer* Controll
 {
 	Super::InitStateComponent_Implementation(Controller);
 
+	Triggers.Empty();
+	Effects.Empty();
+
+	for (auto TriggerClass : TriggersSubClass)
+	{
+		if (!TriggerClass)
+			continue;
+
+		UIGCapacityTrigger* Trigger = NewObject<UIGCapacityTrigger>(this, TriggerClass);
+		Trigger->InitTrigger();
+		Triggers.Add(Trigger);
+	}
+
+	for (auto EffectClass : EffectsSubClass)
+	{
+		if (!EffectClass)
+			continue;
+		UIGCapacityEffect* Effect = NewObject<UIGCapacityEffect>(this, EffectClass);
+		Effect->InitEffect();
+		Effects.Add(Effect);
+	}
+
 	CapacityData.Manager = Controller->GetWorld()->GetSubsystem<UIGGameManager>();
 	CapacityData.Player = Controller;
 }
 
 void UIGCapacityComponent::EnableStateComponent_Implementation()
 {
-	
 }
 
 void UIGCapacityComponent::DisableStateComponent_Implementation()
 {
-
 }
 
 void UIGCapacityComponent::TickStateComponent_Implementation(float DeltaTime)
@@ -101,7 +121,7 @@ void UIGCapacityComponent::TickStateComponent_Implementation(float DeltaTime)
 			for (UIGCapacityEffect* Effect : Effects)
 			{
 				Effect->Timer = -1;
-			}	
+			}
 		}
 	}
 }

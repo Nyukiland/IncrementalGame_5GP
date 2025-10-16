@@ -2,6 +2,11 @@
 
 class UIGStatContainer;
 
+void UIGCapacityTrigger::InitTrigger_Implementation()
+{
+	
+}
+
 void UIGCapacityTrigger::TickTrigger_Implementation(float DeltaTime)
 {
 

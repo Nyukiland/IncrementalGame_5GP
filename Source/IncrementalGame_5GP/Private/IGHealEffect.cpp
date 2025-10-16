@@ -2,6 +2,14 @@
 #include "IGGameManager.h"
 #include "IGStatContainer.h"
 
+void UIGHealEffect::InitEffect_Implementation()
+{
+	Super::InitEffect_Implementation();
+
+	HealStat = NewObject<UIGStatContainer>(this, HealStatSubClass);
+	HealStat->Init();
+}
+
 void UIGHealEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
 	if (HealStat == nullptr)

@@ -3,6 +3,14 @@
 #include "IGStatContainer.h"
 #include "Components/InstancedStaticMeshComponent.h"
 
+void UIGGetEnemiesInAreaEffect::InitEffect_Implementation()
+{
+	Super::InitEffect_Implementation();
+
+	AreaSize = NewObject<UIGStatContainer>(this, AreaSizeSubClass);
+	AreaSize->Init();
+}
+
 void UIGGetEnemiesInAreaEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
 	if (!CapacityData.Manager)

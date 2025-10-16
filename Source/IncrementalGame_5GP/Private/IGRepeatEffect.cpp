@@ -1,5 +1,24 @@
 #include "IGRepeatEffect.h"
 #include "IGGameManager.h"
+#include "IGStatContainer.h"
+
+void UIGRepeatEffect::InitEffect_Implementation()
+{
+	Super::InitEffect_Implementation();
+	
+	RepeatStat = NewObject<UIGStatContainer>(this, RepeatStatSubClass);
+	RepeatStat->Init();
+
+	for (auto EffectSubClass : EffectsSubClass)
+	{
+		if (!EffectSubClass)
+			continue;
+		
+		UIGCapacityEffect* Effect = NewObject<UIGCapacityEffect>(this, EffectSubClass);
+		Effect->InitEffect();
+		Effects.Add(Effect);
+	}
+}
 
 void UIGRepeatEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {

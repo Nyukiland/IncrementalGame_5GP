@@ -2,6 +2,14 @@
 #include "IGGameManager.h"
 #include "IGStatContainer.h"
 
+void UIGDealDamageEffect::InitEffect_Implementation()
+{
+	Super::InitEffect_Implementation();
+
+	DamageStat = NewObject<UIGStatContainer>(this, DamageStatSubClass);
+	DamageStat->Init();
+}
+
 void UIGDealDamageEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
 	if (!CapacityData.Manager)
@@ -19,4 +27,13 @@ void UIGDealDamageEffect::ApplyEffect_Implementation(FCapacityData& CapacityData
 	{
 		CapacityData.Manager->GetEnemy(Index).ApplyDamage(DamageStat->CurrentValue);
 	}
+}
+
+TArray<UIGStatContainer*> UIGDealDamageEffect::GetStats_Implementation()
+{
+	TArray<UIGStatContainer*> Stats;
+
+	Stats.Add(DamageStat);
+
+	return Stats;
 }

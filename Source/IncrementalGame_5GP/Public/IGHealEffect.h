@@ -14,6 +14,10 @@ class INCREMENTALGAME_5GP_API UIGHealEffect : public UIGCapacityEffect
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Heal")
+	TSubclassOf<UIGStatContainer> HealStatSubClass;
+
+public:
+	UPROPERTY()
 	TObjectPtr<UIGStatContainer> HealStat;
 
 private:
@@ -21,6 +25,7 @@ private:
 	UIGGameManager* Manager;
 	
 public:
+	virtual void InitEffect_Implementation() override;
 	virtual void ApplyEffect_Implementation(FCapacityData& CapacityData) override;
 	virtual TArray<UIGStatContainer*> GetStats_Implementation() override;
 };

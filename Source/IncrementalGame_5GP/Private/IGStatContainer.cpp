@@ -2,6 +2,9 @@
 
 void UIGStatContainer::Init()
 {
+	UpgradeEquation = NewObject<UIGMathEquations>(this, UpgradeEquationSubClass);
+
+	PriceEquation = NewObject<UIGMathEquations>(this, PriceEquationSubClass);
 }
 
 bool UIGStatContainer::CheckIfCanUpgrade(float Money)

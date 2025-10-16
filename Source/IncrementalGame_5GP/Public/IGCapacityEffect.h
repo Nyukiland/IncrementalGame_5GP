@@ -23,6 +23,10 @@ public:
 	
 public:
 	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Effect")
+	void InitEffect();
+	virtual void InitEffect_Implementation();
+	
+	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Effect")
 	void ApplyEffect(FCapacityData& CapacityData);
 	virtual void ApplyEffect_Implementation(FCapacityData& CapacityData);
 

@@ -2,6 +2,11 @@
 
 class UIGStatContainer;
 
+void UIGCapacityEffect::InitEffect_Implementation()
+{
+	
+}
+
 void UIGCapacityEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
 	

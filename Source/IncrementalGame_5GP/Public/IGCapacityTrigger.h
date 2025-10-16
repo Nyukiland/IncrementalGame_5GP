@@ -16,6 +16,10 @@ public:
 
 public:
 	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Trigger")
+	void InitTrigger();
+	virtual void InitTrigger_Implementation();
+	
+	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Trigger")
 	void TickTrigger(float DeltaTime);
 	virtual void TickTrigger_Implementation(float DeltaTime);
 	
