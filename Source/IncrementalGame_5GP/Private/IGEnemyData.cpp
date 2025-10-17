@@ -5,6 +5,11 @@ void FEnemyData::ApplyDamage(float Damage)
 	if (Health <= 0)
 		return;
 
+	for (FStatus Status : Statuses)
+	{
+		Damage *= Status.DamageMultiplier;
+	}
+	
 	Health -= Damage;
 	if (Health <= 0) Death();
 }

@@ -15,6 +15,8 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RepeatEffect")
 	TArray<TSubclassOf<UIGCapacityEffect>> EffectsSubClass;
+
+	int LoopIndex;
 	
 public:
 	UPROPERTY()

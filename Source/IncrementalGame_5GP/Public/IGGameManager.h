@@ -35,8 +35,7 @@ protected:
 	UInstancedStaticMeshComponent* EnemiesMeshInstances;
 
 	TArray<FEnemyData> EnemiesData;
-
-	TArray<int32> ActiveEnemiesIndices;
+	
 	TArray<int32> InactiveEnemiesIndices;
 
 	// central tower pos, can be replaced by a ref
@@ -64,6 +63,9 @@ protected:
 
 	uint32 ClosestEnemyIndex;
 	uint32 FarthestEnemyIndex;
+
+public:
+	TArray<int32> ActiveEnemiesIndices;
 	
 public:
 	virtual void Tick(float DeltaTime) override;

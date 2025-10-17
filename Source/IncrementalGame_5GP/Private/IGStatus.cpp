@@ -1,13 +1,8 @@
 #include "IGStatus.h"
 
-void FStatus::InitStatus(float DamageValue, float SlowEffectValue, float DurationValue, float TimeBetweenShotsValue)
+void FStatus::InitStatus()
 {
 	Timer = 0;
-	
-	Damage = DamageValue;
-	SlowEffect = SlowEffectValue;
-	Duration = DurationValue;
-	TimeBetweenShots = TimeBetweenShotsValue;
 }
 
 bool FStatus::UpdateStatus(float DeltaTime, float& DamageOut, float& SlowFactorOut)

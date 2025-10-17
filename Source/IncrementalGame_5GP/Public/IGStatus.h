@@ -17,16 +17,27 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Status")
 	bool bCanStack = false;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Status")
+	float Damage;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Status")
+	float DamageMultiplier;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Status")
+	float SlowEffect;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Status")
+	float Duration;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Status")
+	float TimeBetweenShots;
+	
 private:
 	float Timer = 0;
 		
-	float Damage;
-	float SlowEffect;
-	float Duration;
-	float TimeBetweenShots;
 
 public:
-	void InitStatus(float DamageValue, float SlowEffectValue, float DurationValue, float TimeBetweenShotsValue);
+	void InitStatus();
 	bool UpdateStatus(float DeltaTime, float& DamageOut, float& SlowFactorOut);
 };
