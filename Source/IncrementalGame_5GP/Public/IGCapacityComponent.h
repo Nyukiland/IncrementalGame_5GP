@@ -34,6 +34,12 @@ private:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
+	TObjectPtr<UTexture2D> SpriteVisu;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
+	FName Name;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
 	float Price;
 	
 	TArray<TObjectPtr<UIGCapacityTrigger>> Triggers;
