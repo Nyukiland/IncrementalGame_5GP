@@ -1,10 +1,17 @@
 #include "Effect/IGRepeatEffect.h"
-#include "IGGameManager.h"
+#include "Effect/IGCombinedEffect.h"
 #include "IGStatContainer.h"
+#include "IGGameManager.h"
 
 void UIGRepeatEffect::InitEffect_Implementation()
 {
 	Super::InitEffect_Implementation();
+
+	if (!RepeatStatSubClass)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[RepeatEffect] RepeatStatSubClass is not set"))
+		return;
+	}
 	
 	RepeatStat = NewObject<UIGStatContainer>(this, RepeatStatSubClass);
 	RepeatStat->Init();
@@ -13,39 +20,62 @@ void UIGRepeatEffect::InitEffect_Implementation()
 	{
 		if (!EffectSubClass)
 			continue;
+
+		if (EffectSubClass == StaticClass()
+			|| EffectSubClass == UIGCombinedEffect::StaticClass())
+		{
+			UE_LOG(LogTemp, Error, TEXT(
+				"[RepeatEffect] Please do not set a RepeatEffect or a CombineEffect in a loop effect"));
+			continue;
+		}
 		
 		UIGCapacityEffect* Effect = NewObject<UIGCapacityEffect>(this, EffectSubClass);
 		Effect->InitEffect();
 		Effects.Add(Effect);
+
+		Duration += Effect->Duration;
 	}
 }
 
 void UIGRepeatEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
-	//Ugly sorry
-	bWaitToBeComplete = true;
-	Duration = BIG_NUMBER;
+	if (!RepeatStat)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[RepeatEffect] RepeatStat is not set"))
+		Timer = BIG_NUMBER;
+		return;
+	}
 	
 	if (ExecuteEffect(CapacityData))
 	{
-		Timer = BIG_NUMBER;
+		if (LoopIndex == RepeatStat->CurrentValue)
+			Timer = BIG_NUMBER;
+		else
+			LoopIndex++;
+		
+		for (UIGCapacityEffect* Effect : Effects)
+		{
+			Effect->Timer = -1;
+		}
 	}
 }
 
 TArray<UIGStatContainer*> UIGRepeatEffect::GetStats_Implementation()
 {
 	TArray<UIGStatContainer*> Stats;
+
+	if (!RepeatStat)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[RepeatEffect] RepeatStat is not set"))
+		return Stats;
+	}
+	
+	Stats.Add(RepeatStat);
 	
 	for (UIGCapacityEffect* Effect : Effects)
 	{
 		if (!Effect)
 		{
-			continue;
-		}
-		
-		if (Cast<UIGRepeatEffect>(Effect))
-		{
-			UE_LOG(LogTemp, Error, TEXT("[IGRepeatEffect] Do not loop effect in another loop"));
 			continue;
 		}
 
@@ -64,7 +94,7 @@ bool UIGRepeatEffect::ExecuteEffect(FCapacityData& CapacityData)
 	{
 		DeltaTime = CapacityData.Manager->GetWorld()->GetDeltaSeconds();
 	}
-	
+
 	for (UIGCapacityEffect* Effect : Effects)
 	{
 		if (!Effect || Effect->Timer >= Effect->Duration)
@@ -77,11 +107,9 @@ bool UIGRepeatEffect::ExecuteEffect(FCapacityData& CapacityData)
 			Effect->Timer = 0;
 		else
 			Effect->Timer += DeltaTime;
-		
-		Effect->ApplyEffect(CapacityData);
 
-		if (Effect->bWaitToBeComplete)
-			return false;
+		Effect->ApplyEffect(CapacityData);
+		return false;
 	}
 
 	return ValidEffectCount == Effects.Num();

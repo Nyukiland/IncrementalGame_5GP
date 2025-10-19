@@ -26,4 +26,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Capacity")
 	AIGPlayer* Player;
+
+public:
+	void ResetData();
 };

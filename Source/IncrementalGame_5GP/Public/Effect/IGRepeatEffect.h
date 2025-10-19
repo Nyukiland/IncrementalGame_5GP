@@ -9,6 +9,13 @@ class INCREMENTALGAME_5GP_API UIGRepeatEffect : public UIGCapacityEffect
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY()
+	TObjectPtr<UIGStatContainer> RepeatStat;
+	
+	UPROPERTY()
+	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RepeatEffect")
 	TSubclassOf<UIGStatContainer> RepeatStatSubClass;
@@ -17,13 +24,6 @@ protected:
 	TArray<TSubclassOf<UIGCapacityEffect>> EffectsSubClass;
 
 	int LoopIndex;
-	
-public:
-	UPROPERTY()
-	TObjectPtr<UIGStatContainer> RepeatStat;
-	
-	UPROPERTY()
-	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
 
 public:
 	virtual void InitEffect_Implementation() override;

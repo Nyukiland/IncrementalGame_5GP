@@ -15,9 +15,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity|Effect")
 	float Duration = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity|Effect")
-	bool bWaitToBeComplete = false;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Capacity|Effect")
 	float Timer = -1;
 	

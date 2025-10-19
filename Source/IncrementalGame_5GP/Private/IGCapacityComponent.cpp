@@ -36,9 +36,7 @@ bool UIGCapacityComponent::ExecuteEffect(float DeltaTime)
 			Effect->Timer += DeltaTime;
 
 		Effect->ApplyEffect(CapacityData);
-
-		if (Effect->bWaitToBeComplete)
-			return false;
+		return false;
 	}
 
 	return ValidEffectCount == Effects.Num();
@@ -97,6 +95,7 @@ void UIGCapacityComponent::InitStateComponent_Implementation(AIGPlayer* Controll
 
 void UIGCapacityComponent::EnableStateComponent_Implementation()
 {
+	CapacityData.ResetData();
 }
 
 void UIGCapacityComponent::DisableStateComponent_Implementation()
@@ -122,6 +121,8 @@ void UIGCapacityComponent::TickStateComponent_Implementation(float DeltaTime)
 			{
 				Effect->Timer = -1;
 			}
+
+			CapacityData.ResetData();
 		}
 	}
 }
