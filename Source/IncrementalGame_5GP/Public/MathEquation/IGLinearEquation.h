@@ -10,6 +10,9 @@ class INCREMENTALGAME_5GP_API UIGLinearEquation : public UIGMathEquations
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Math")
+	FName Equation = "Y = (A * (X + B)) + C";
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Math")
 	float A = 1;
 

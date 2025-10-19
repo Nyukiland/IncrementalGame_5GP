@@ -10,6 +10,9 @@ class INCREMENTALGAME_5GP_API UIGConstantEquation : public UIGMathEquations
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Math")
+	FName Equation = "Y = Value";
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Math")
 	float Value = 1;
 	

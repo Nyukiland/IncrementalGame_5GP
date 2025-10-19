@@ -10,6 +10,9 @@ class INCREMENTALGAME_5GP_API UIGExponentialEquation : public UIGMathEquations
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Math")
+	FName Equation = "Y = A * (FMath::Pow(A, ((B* X) + C))) + D";
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Math")
 	float A = 0;
 
