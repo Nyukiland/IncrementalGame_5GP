@@ -1,4 +1,4 @@
-#include "IGCapacityEffect.h"
+#include "Effect/IGCapacityEffect.h"
 
 class UIGStatContainer;
 

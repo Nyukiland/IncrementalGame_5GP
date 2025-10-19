@@ -1,4 +1,4 @@
-#include "IGDealDamageEffect.h"
+#include "Effect/IGDealDamageEffect.h"
 #include "IGGameManager.h"
 #include "IGStatContainer.h"
 

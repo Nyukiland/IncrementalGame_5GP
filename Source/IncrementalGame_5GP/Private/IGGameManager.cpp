@@ -1,7 +1,7 @@
 #include "IGGameManager.h"
 #include "Math/UnrealMathUtility.h"
 #include "IGEnemyData.h"
-#include "IGMathEquations.h"
+#include "MathEquation/IGMathEquations.h"
 #include "IGMathHelper.h"
 #include "Components/InstancedStaticMeshComponent.h"
 

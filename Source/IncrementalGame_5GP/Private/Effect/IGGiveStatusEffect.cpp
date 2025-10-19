@@ -1,4 +1,4 @@
-#include "IGGiveStatusEffect.h"
+#include "Effect/IGGiveStatusEffect.h"
 #include "IGGameManager.h"
 #include "IGStatContainer.h"
 

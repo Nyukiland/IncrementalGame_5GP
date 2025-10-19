@@ -1,15 +1,15 @@
-#include "IGGetFurthestEnemyEffect.h"
+#include "Effect/IGGetClosestEnemyEffect.h"
 #include "IGGameManager.h"
 
-void UIGGetFurthestEnemyEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
+void UIGGetClosestEnemyEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
 	if (!CapacityData.Manager)
 	{
-		UE_LOG(LogTemp, Error, TEXT("[IGGetFurthestEnemyEffect] CapacityData.Manager is not set"));
+		UE_LOG(LogTemp, Error, TEXT("[IGGetClosestEnemyEffect] CapacityData.Manager is not set"));
 		return;
 	}
 
-	int EnemyIndex = CapacityData.Manager->GetFarthestEnemy();
+	int EnemyIndex = CapacityData.Manager->GetClosestEnemy();
 
 	if (CapacityData.EnemiesIndex.Contains(EnemyIndex))
 	{

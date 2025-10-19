@@ -1,4 +1,4 @@
-#include "IGLinearEquation.h"
+#include "MathEquation/IGLinearEquation.h"
 
 float UIGLinearEquation::GetValue_Implementation(int T)
 {

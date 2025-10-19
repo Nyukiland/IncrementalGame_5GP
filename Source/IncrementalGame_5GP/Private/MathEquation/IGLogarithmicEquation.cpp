@@ -1,4 +1,4 @@
-#include "IGLogarithmicEquation.h"
+#include "MathEquation/IGLogarithmicEquation.h"
 
 float UIGLogarithmicEquation::GetValue_Implementation(int T)
 {

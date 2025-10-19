@@ -1,4 +1,4 @@
-#include "IGExponentialEquation.h"
+#include "MathEquation/IGExponentialEquation.h"
 
 float UIGExponentialEquation::GetValue_Implementation(int T)
 {

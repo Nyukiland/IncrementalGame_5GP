@@ -1,4 +1,4 @@
-#include "IGRepeatEffect.h"
+#include "Effect/IGRepeatEffect.h"
 #include "IGGameManager.h"
 #include "IGStatContainer.h"
 

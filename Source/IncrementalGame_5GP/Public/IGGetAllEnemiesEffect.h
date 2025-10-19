@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "IGCapacityEffect.h"
+#include "Effect/IGCapacityEffect.h"
 #include "IGGetAllEnemiesEffect.generated.h"
 
 UCLASS()

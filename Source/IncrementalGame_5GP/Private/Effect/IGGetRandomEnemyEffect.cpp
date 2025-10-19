@@ -1,4 +1,4 @@
-#include "IGGetRandomEnemyEffect.h"
+#include "Effect/IGGetRandomEnemyEffect.h"
 #include "IGGameManager.h"
 
 void UIGGetRandomEnemyEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)

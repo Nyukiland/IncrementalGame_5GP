@@ -1,4 +1,4 @@
-#include "IGGetEnemiesInAreaEffect.h"
+#include "Effect/IGGetEnemiesInAreaEffect.h"
 #include "IGGameManager.h"
 #include "IGStatContainer.h"
 #include "Components/InstancedStaticMeshComponent.h"

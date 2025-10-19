@@ -1,4 +1,4 @@
-#include "IGMathEquations.h"
+#include "MathEquation/IGMathEquations.h"
 
 float UIGMathEquations::GetValue_Implementation(int T)
 {

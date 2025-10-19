@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "IGMathEquations.h"
+#include "MathEquation/IGMathEquations.h"
 #include "IGStatContainer.generated.h"
 
 UCLASS(Blueprintable)

@@ -1,4 +1,4 @@
-#include "IGHealEffect.h"
+#include "Effect/IGHealEffect.h"
 #include "IGGameManager.h"
 #include "IGStatContainer.h"
 

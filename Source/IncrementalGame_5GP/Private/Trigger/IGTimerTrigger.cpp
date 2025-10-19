@@ -1,4 +1,4 @@
-#include "IGTimerTrigger.h"
+#include "Trigger/IGTimerTrigger.h"
 #include "IGStatContainer.h"
 
 void UIGTimerTrigger::InitTrigger_Implementation()

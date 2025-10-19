@@ -1,6 +1,6 @@
 #include "IGCapacityComponent.h"
-#include "IGCapacityTrigger.h"
-#include "IGCapacityEffect.h"
+#include "Trigger/IGCapacityTrigger.h"
+#include "Effect/IGCapacityEffect.h"
 #include "IGGameManager.h"
 #include "IGPlayer.h"
 

@@ -1,4 +1,4 @@
-#include "IGCapacityTrigger.h"
+#include "Trigger/IGCapacityTrigger.h"
 
 class UIGStatContainer;
 

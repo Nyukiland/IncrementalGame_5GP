@@ -1,4 +1,4 @@
-#include "IGGetEnemiesInLineEffect.h"
+#include "Effect/IGGetEnemiesInLineEffect.h"
 #include "Components/InstancedStaticMeshComponent.h"
 
 void UIGGetEnemiesInLineEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
