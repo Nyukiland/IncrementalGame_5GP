@@ -33,8 +33,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	UInstancedStaticMeshComponent* EnemiesMeshInstances;
-
-	TArray<FEnemyData> EnemiesData;
 	
 	TArray<int32> InactiveEnemiesIndices;
 
@@ -65,7 +63,9 @@ protected:
 	uint32 FarthestEnemyIndex;
 
 public:
+	TArray<FEnemyData> EnemiesData;
 	TArray<int32> ActiveEnemiesIndices;
+	TMap<int32, int32> InstanceIdToEnemyIndex;
 	
 public:
 	virtual void Tick(float DeltaTime) override;

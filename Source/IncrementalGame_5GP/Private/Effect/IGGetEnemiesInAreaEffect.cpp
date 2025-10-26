@@ -33,12 +33,18 @@ void UIGGetEnemiesInAreaEffect::ApplyEffect_Implementation(FCapacityData& Capaci
 		Params
 	);
 
+	TArray<FEnemyData*> EnemiesInRange;
+	
 	for (const FHitResult& Result : HitResults)
 	{
-		if (UInstancedStaticMeshComponent* ISM = Cast<UInstancedStaticMeshComponent>(Result.Component))
+		UInstancedStaticMeshComponent* ISM = Cast<UInstancedStaticMeshComponent>(Result.Component);
+		if (!ISM) continue;
+
+		if (int32* EnemyIndexPtr = CapacityData.Manager->InstanceIdToEnemyIndex.Find(Result.Item))
 		{
-			int32 InstanceIndex = Result.Item;
-			UE_LOG(LogTemp, Log, TEXT("Hit instance %d on %s \n get enemy from instance need to be configured"), InstanceIndex, *ISM->GetName());
+			FEnemyData& EnemyData = CapacityData.Manager->EnemiesData[*EnemyIndexPtr];
+			if (EnemyData.IsActive())
+				EnemiesInRange.Add(&EnemyData);
 		}
 	}
 }

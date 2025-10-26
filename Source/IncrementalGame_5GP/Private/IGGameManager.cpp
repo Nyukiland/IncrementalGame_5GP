@@ -106,14 +106,17 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 	NewEnemyData.EnemiesData = &EnemiesData;
 	
 	EnemiesMeshInstances->UpdateInstanceTransform(InstanceId, NewEnemyData.Transform, true, true, true);
-
+	InstanceIdToEnemyIndex.Add(InstanceId, NewEnemyIndex);
+	
 	return InstanceId;
 }
 
 void UIGGameManager::KillEnemy(int EnemyIndex)
 {
 	FEnemyData EnemyToKill = GetEnemy(EnemyIndex);
+	int32 InstanceId = EnemyToKill.InstanceId;
 	EnemiesMeshInstances->RemoveInstance(EnemyToKill.InstanceId);
+	InstanceIdToEnemyIndex.Remove(InstanceId);
 	EnemyToKill.Kill();
 }
 
