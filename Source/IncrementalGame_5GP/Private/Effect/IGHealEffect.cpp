@@ -6,6 +6,12 @@ void UIGHealEffect::InitEffect_Implementation()
 {
 	Super::InitEffect_Implementation();
 
+	if (HealStatSubClass == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[HealEffect] HealStatSubClass not properly set"));
+		return;
+	}
+	
 	HealStat = NewObject<UIGStatContainer>(this, HealStatSubClass);
 	HealStat->Init();
 }

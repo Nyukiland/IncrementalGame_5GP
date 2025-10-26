@@ -1,4 +1,4 @@
-#include "IGGetAllEnemiesEffect.h"
+#include "Effect/IGGetAllEnemiesEffect.h"
 #include "IGGameManager.h"
 
 void UIGGetAllEnemiesEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
