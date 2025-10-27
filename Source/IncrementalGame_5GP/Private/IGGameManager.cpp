@@ -9,14 +9,14 @@ void UIGGameManager::Tick(float DeltaTime)
 {
 	if (CurrentZoneFrameInvincibility < MaxZoneFrameInvincibility)
 		CurrentZoneFrameInvincibility++;
-	
+
 	if (!EnemiesMeshInstances) return;
 
 	ClosestEnemyIndex = -1;
 	FarthestEnemyIndex = -1;
 	float ClosestEnemyDistance = BIG_NUMBER;
 	float FarthestEnemyDistance = -1;
-	
+
 	for (int i = 0; i < EnemiesData.Num(); i++)
 	{
 		if (!EnemiesData[i].IsActive()) continue;
@@ -26,7 +26,7 @@ void UIGGameManager::Tick(float DeltaTime)
 		float EnemyDistanceFromOrigin;
 		EnemiesData[i].UpdatePosition(DeltaTime, EnemyInstanceId, EnemyTransform, EnemyDistanceFromOrigin);
 		EnemiesMeshInstances->UpdateInstanceTransform(EnemyInstanceId, EnemyTransform, true, true, true);
-		
+
 		if (EnemyDistanceFromOrigin < ClosestEnemyDistance)
 		{
 			ClosestEnemyDistance = EnemyDistanceFromOrigin;
@@ -49,10 +49,51 @@ void UIGGameManager::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
 
+	if (DecreaseZoneCurveSubClass)
+	{
+		DecreaseZoneCurve = NewObject<UIGMathEquations>(this, DecreaseZoneCurveSubClass);
+	}
+
+	if (EnemyHealthSubClass)
+	{
+		EnemyHealth = NewObject<UIGMathEquations>(this, EnemyHealthSubClass);
+	}
+
+	if (EnemySpeedSubClass)
+	{
+		EnemySpeed = NewObject<UIGMathEquations>(this, EnemySpeedSubClass);
+	}
+
+	if (MaxSpawnCountCurveSubClass)
+	{
+		MaxSpawnCountCurve = NewObject<UIGMathEquations>(this, MaxSpawnCountCurveSubClass);
+	}
+
+	if (SpawnRateCurveSubClass)
+	{
+		SpawnRateCurve = NewObject<UIGMathEquations>(this, SpawnRateCurveSubClass);
+	}
+	
 	CurrentZoneFrameInvincibility = MaxZoneFrameInvincibility;
 
-	EnemiesMeshInstances = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("InstancedMesh"));
-	//EnemiesMeshInstances->SetStaticMesh(MyMesh);
+	AActor* MeshOwnerActor = InWorld.SpawnActor<AActor>(AActor::StaticClass());
+	EnemiesMeshInstances = NewObject<UInstancedStaticMeshComponent>(MeshOwnerActor);
+	EnemiesMeshInstances->AttachToComponent(MeshOwnerActor->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	EnemiesMeshInstances->RegisterComponent();
+
+	if (PlaneMesh)
+	{
+		EnemiesMeshInstances->SetStaticMesh(PlaneMesh);
+	}
+
+	if (EnemyVisu && BaseMaterial)
+	{
+		UMaterialInstanceDynamic* DynMat = UMaterialInstanceDynamic::Create(BaseMaterial, this);
+		DynMat->SetTextureParameterValue(FName("SpriteTexture"), EnemyVisu);
+		EnemiesMeshInstances->SetMaterial(0, DynMat);
+	}
+
+
 	EnemiesMeshInstances->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	EnemiesMeshInstances->SetCollisionProfileName(TEXT("EnemyOnly"));
 }
@@ -86,7 +127,7 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 	else
 		// Pooled enemy
 		NewEnemyIndex = InactiveEnemiesIndices.Pop();
-	
+
 	int32 InstanceId = EnemiesMeshInstances->AddInstance(SpawnTransform);
 	if (InstanceId < 0)
 	{
@@ -97,17 +138,18 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 		}
 		return INDEX_NONE;
 	}
-	
+
 	FVector BaseDirection = UIGMathHelper::GetRandomPointInCircle();
 	FEnemyData& NewEnemyData = EnemiesData[NewEnemyIndex];
-	NewEnemyData.Init(Origin + BaseDirection, EnemyHealth->GetValue(0), BaseDirection, EnemySpeed->GetValue(0), InstanceId);
+	NewEnemyData.Init(Origin + BaseDirection, EnemyHealth->GetValue(0), BaseDirection, EnemySpeed->GetValue(0),
+	                  InstanceId);
 	NewEnemyData.ActiveEnemiesIndices = &ActiveEnemiesIndices;
 	NewEnemyData.InactiveEnemiesIndices = &InactiveEnemiesIndices;
 	NewEnemyData.EnemiesData = &EnemiesData;
-	
+
 	EnemiesMeshInstances->UpdateInstanceTransform(InstanceId, NewEnemyData.Transform, true, true, true);
 	InstanceIdToEnemyIndex.Add(InstanceId, NewEnemyIndex);
-	
+
 	return InstanceId;
 }
 
@@ -151,7 +193,7 @@ void UIGGameManager::ChangeZoneSize(float ChangeFactor)
 
 		CurrentZoneFrameInvincibility = 0;
 	}
-	
+
 	CurrentZoneRadius += ChangeFactor;
 
 	CurrentZoneRadius = FMath::Clamp(CurrentZoneRadius, MinZoneRadius, MaxZoneRadius);

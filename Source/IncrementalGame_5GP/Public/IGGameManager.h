@@ -12,12 +12,28 @@ class INCREMENTALGAME_5GP_API UIGGameManager : public UWorldSubsystem, public FT
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY()
+	TObjectPtr<UIGMathEquations> MaxSpawnCountCurve;
+	
+	UPROPERTY()
+	TObjectPtr<UIGMathEquations> SpawnRateCurve;
+	
+	UPROPERTY()
+	TObjectPtr<UIGMathEquations> EnemyHealth;
+	
+	UPROPERTY()
+	TObjectPtr<UIGMathEquations> EnemySpeed;
+	
+	UPROPERTY()
+	TObjectPtr<UIGMathEquations> DecreaseZoneCurve;
+	
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Enemy")
-	TObjectPtr<UIGMathEquations> MaxSpawnCountCurve;
+	TSubclassOf<UIGMathEquations> MaxSpawnCountCurveSubClass;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Enemy")
-	TObjectPtr<UIGMathEquations> SpawnRateCurve;
+	TSubclassOf<UIGMathEquations> SpawnRateCurveSubClass;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Enemy")
 	int CurrentMaxEnemyCount;
@@ -26,12 +42,21 @@ protected:
 	float CurrentEnemySpawnRate;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Enemy")
-	TObjectPtr<UIGMathEquations> EnemyHealth;
+	TSubclassOf<UIGMathEquations> EnemyHealthSubClass;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Enemy")
-	TObjectPtr<UIGMathEquations> EnemySpeed;
+	TSubclassOf<UIGMathEquations> EnemySpeedSubClass;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	TObjectPtr<UTexture2D> EnemyVisu;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy")
+	TObjectPtr<UStaticMesh> PlaneMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy")
+	TObjectPtr<UMaterialInterface> BaseMaterial;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy")
 	UInstancedStaticMeshComponent* EnemiesMeshInstances;
 	
 	TArray<int32> InactiveEnemiesIndices;
@@ -42,7 +67,7 @@ protected:
 	TMap<FIntPoint, TArray<int32>> Grid;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Zone")
-	TObjectPtr<UIGMathEquations> DecreaseZoneCurve;
+	TSubclassOf<UIGMathEquations> DecreaseZoneCurveSubClass;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Zone")
 	float MinZoneRadius;
