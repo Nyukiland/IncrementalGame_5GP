@@ -126,3 +126,22 @@ void UIGCapacityComponent::TickStateComponent_Implementation(float DeltaTime)
 		}
 	}
 }
+
+TArray<UIGStatContainer*> UIGCapacityComponent::GetStats_Implementation()
+{
+	TArray<UIGStatContainer*> Stats;
+
+	for (UIGCapacityEffect* Effect : Effects)
+	{
+		if (Effect)
+			Stats.Append(Effect->GetStats());
+	}
+
+	for (UIGCapacityTrigger* Trigger : Triggers)
+	{
+		if (Trigger)
+			Stats.Append(Trigger->GetStats());
+	}
+
+	return Stats;
+}

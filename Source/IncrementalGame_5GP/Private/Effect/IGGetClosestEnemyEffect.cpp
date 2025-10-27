@@ -10,11 +10,9 @@ void UIGGetClosestEnemyEffect::ApplyEffect_Implementation(FCapacityData& Capacit
 	}
 
 	int EnemyIndex = CapacityData.Manager->GetClosestEnemy();
-
-	if (CapacityData.EnemiesIndex.Contains(EnemyIndex))
-	{
+	
+	if (EnemyIndex == -1 || CapacityData.EnemiesIndex.Contains(EnemyIndex))
 		return;
-	}
 	
 	CapacityData.PreviousAimPosition = CapacityData.CurrentAimPositon;
 	CapacityData.CurrentAimPositon = CapacityData.Manager->GetEnemy(EnemyIndex).Transform.GetLocation();

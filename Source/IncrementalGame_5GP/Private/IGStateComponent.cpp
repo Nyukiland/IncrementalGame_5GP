@@ -12,10 +12,12 @@ void UIGStateComponent::InitStateComponent_Implementation(AIGPlayer* Controller)
 
 void UIGStateComponent::EnableStateComponent_Implementation()
 {
+	bActive = true;
 }
 
 void UIGStateComponent::DisableStateComponent_Implementation()
 {
+	bActive = false;
 }
 
 void UIGStateComponent::TickStateComponent_Implementation(float DeltaTime)

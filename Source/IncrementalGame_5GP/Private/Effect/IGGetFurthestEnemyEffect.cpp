@@ -11,7 +11,7 @@ void UIGGetFurthestEnemyEffect::ApplyEffect_Implementation(FCapacityData& Capaci
 
 	int EnemyIndex = CapacityData.Manager->GetFarthestEnemy();
 
-	if (CapacityData.EnemiesIndex.Contains(EnemyIndex))
+	if (EnemyIndex == -1 || CapacityData.EnemiesIndex.Contains(EnemyIndex))
 	{
 		return;
 	}

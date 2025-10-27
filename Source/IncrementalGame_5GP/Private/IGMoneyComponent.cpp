@@ -6,6 +6,11 @@ void UIGMoneyComponent::DisableStateComponent_Implementation()
 	Money = 0;
 }
 
+int UIGMoneyComponent::CurrentMoney()
+{
+	return Money;
+}
+
 void UIGMoneyComponent::GiveMoney(int NewAmount)
 {
 	Money += NewAmount;

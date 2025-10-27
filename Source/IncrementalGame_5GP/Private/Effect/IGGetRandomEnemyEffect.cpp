@@ -11,7 +11,7 @@ void UIGGetRandomEnemyEffect::ApplyEffect_Implementation(FCapacityData& Capacity
 
 	int EnemyIndex = CapacityData.Manager->GetRandomEnemy();
 
-	if (CapacityData.EnemiesIndex.Contains(EnemyIndex))
+	if (EnemyIndex == -1 || CapacityData.EnemiesIndex.Contains(EnemyIndex))
 	{
 		return;
 	}

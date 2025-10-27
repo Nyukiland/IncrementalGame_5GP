@@ -28,7 +28,9 @@ protected:
 	TObjectPtr<UIGMathEquations> PriceEquation;
 	
 public:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float CurrentValue;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	float CurrentPrice;
 	
 public:
@@ -36,11 +38,11 @@ public:
 	void Init();
 	
 	UFUNCTION(BlueprintCallable)
-	bool CheckIfCanUpgrade(float Money);
+	bool CheckIfCanUpgrade(int Money);
 
 	UFUNCTION(BlueprintCallable)
 	void Upgrade();
 
 	UFUNCTION(BlueprintCallable)
-	bool TryUpgrade(float Money);
+	bool TryUpgrade(int Money);
 };

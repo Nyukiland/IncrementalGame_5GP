@@ -19,9 +19,10 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "State")
 	TArray<TSubclassOf<UIGStateComponent>> DefaultActiveComponent;
 
-private:
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StateComponent")
 	TArray<TObjectPtr<UIGStateComponent>> StateComponents;
+	
+private:
 	int ActiveComponentCount = 0;
 	UPROPERTY()
 	TObjectPtr<UIGState> CurrentState;

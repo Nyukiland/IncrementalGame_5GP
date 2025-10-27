@@ -5,6 +5,7 @@
 #include "IGStateComponent.h"
 #include "IGCapacityComponent.generated.h"
 
+class UIGStatContainer;
 class UIGGameManager;
 struct FEnemyData;
 class UIGCapacityTrigger;
@@ -53,4 +54,8 @@ public:
 	virtual void DisableStateComponent_Implementation() override;
 
 	virtual void TickStateComponent_Implementation(float DeltaTime) override;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity")
+	TArray<UIGStatContainer*> GetStats();
+	virtual TArray<UIGStatContainer*> GetStats_Implementation();
 };

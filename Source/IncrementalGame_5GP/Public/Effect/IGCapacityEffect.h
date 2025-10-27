@@ -19,15 +19,15 @@ public:
 	float Timer = -1;
 	
 public:
-	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Effect")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Effect")
 	void InitEffect();
 	virtual void InitEffect_Implementation();
 	
-	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Effect")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Effect")
 	void ApplyEffect(FCapacityData& CapacityData);
 	virtual void ApplyEffect_Implementation(FCapacityData& CapacityData);
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Effect")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Effect")
 	TArray<UIGStatContainer*> GetStats();
 	virtual TArray<UIGStatContainer*> GetStats_Implementation();
 };

@@ -17,15 +17,15 @@ protected:
 	TObjectPtr<AIGPlayer> Owner;
 
 public:
-	UFUNCTION(BlueprintNativeEvent, Category = "State")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "State")
 	void OnEnter(AIGPlayer* GameController);
 	virtual void OnEnter_Implementation(AIGPlayer* GameController);
 	
-	UFUNCTION(BlueprintNativeEvent, Category = "State")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "State")
 	void OnExit();
 	virtual void OnExit_Implementation();
 
-	UFUNCTION(BlueprintNativeEvent, Category = "State")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "State")
 	void OnTick(float DeltaTime);
 	virtual void OnTick_Implementation(float DeltaTime);
 };

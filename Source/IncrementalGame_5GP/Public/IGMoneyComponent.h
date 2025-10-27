@@ -14,8 +14,14 @@ private:
 
 public:
 	virtual void DisableStateComponent_Implementation() override;
+	UFUNCTION(BlueprintCallable, Category = "MoneyComponent")
+	int CurrentMoney();
+	UFUNCTION(BlueprintCallable, Category = "MoneyComponent")
 	void GiveMoney(int NewAmount);
+	UFUNCTION(BlueprintCallable, Category = "MoneyComponent")
 	void RemoveMoney(int DelAmount);
+	UFUNCTION(BlueprintCallable, Category = "MoneyComponent")
 	bool HasEnoughMoney(int Amount);
+	UFUNCTION(BlueprintCallable, Category = "MoneyComponent")
 	bool TryBuy(int Amount);
 };

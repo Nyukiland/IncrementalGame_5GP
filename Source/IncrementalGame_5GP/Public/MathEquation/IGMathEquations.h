@@ -9,7 +9,7 @@ class INCREMENTALGAME_5GP_API UIGMathEquations : public UObject
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintNativeEvent, Category = "Math")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Math")
 	float GetValue(int T);
 	virtual float GetValue_Implementation(int T);
 };

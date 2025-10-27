@@ -15,22 +15,26 @@ protected:
 	UPROPERTY()
 	TObjectPtr<AIGPlayer> Owner;
 
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StateComponent")
+	bool bActive;
+
 public:	
 	UIGStateComponent();
 
-	UFUNCTION(BlueprintNativeEvent, Category = "State")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "StateComponent")
 	void InitStateComponent(AIGPlayer* Controller);
 	virtual void InitStateComponent_Implementation(AIGPlayer* Controller);
 
-	UFUNCTION(BlueprintNativeEvent, Category = "State")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "StateComponent")
 	void EnableStateComponent();
 	virtual void EnableStateComponent_Implementation();
 
-	UFUNCTION(BlueprintNativeEvent, Category = "State")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "StateComponent")
 	void DisableStateComponent();
 	virtual void DisableStateComponent_Implementation();
 	
-	UFUNCTION(BlueprintNativeEvent, Category = "State")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "StateComponent")
 	void TickStateComponent(float DeltaTime);
 	virtual void TickStateComponent_Implementation(float DeltaTime);
 };

@@ -15,19 +15,19 @@ public:
 	bool bTriggerReady = false;
 
 public:
-	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Trigger")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Trigger")
 	void InitTrigger();
 	virtual void InitTrigger_Implementation();
 	
-	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Trigger")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Trigger")
 	void TickTrigger(float DeltaTime);
 	virtual void TickTrigger_Implementation(float DeltaTime);
 	
-	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Trigger")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Trigger")
 	void ResetTrigger();
 	virtual void ResetTrigger_Implementation();
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Capacity|Trigger")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Trigger")
 	TArray<UIGStatContainer*> GetStats();
 	virtual TArray<UIGStatContainer*> GetStats_Implementation();
 };
