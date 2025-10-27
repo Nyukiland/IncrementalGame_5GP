@@ -45,18 +45,15 @@ void UIGGetClosestEnemyInAreaEffect::ApplyEffect_Implementation(FCapacityData& C
 		Params
 	);
 
-	TArray<FEnemyData*> EnemiesInRange;
-	
 	for (const FHitResult& Result : HitResults)
 	{
 		UInstancedStaticMeshComponent* ISM = Cast<UInstancedStaticMeshComponent>(Result.Component);
 		if (!ISM) continue;
 
-		if (int32* EnemyIndexPtr = CapacityData.Manager->InstanceIdToEnemyIndex.Find(Result.Item))
+		int32* EnemyIndexPtr = CapacityData.Manager->InstanceIdToEnemyIndex.Find(Result.Item);
+		if (EnemyIndexPtr && !CapacityData.EnemiesIndex.Contains(*EnemyIndexPtr))
 		{
-			FEnemyData& EnemyData = CapacityData.Manager->EnemiesData[*EnemyIndexPtr];
-			if (EnemyData.IsActive())
-				EnemiesInRange.Add(&EnemyData);
+			CapacityData.EnemiesIndex.Add(*EnemyIndexPtr);
 		}
 	}
 }
