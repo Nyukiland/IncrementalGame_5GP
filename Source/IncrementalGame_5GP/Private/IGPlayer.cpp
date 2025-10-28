@@ -143,3 +143,8 @@ void AIGPlayer::ChangeState(TSubclassOf<UIGState> StateClass)
 	NewState->OnEnter(this);
 	CurrentState = NewState;
 }
+
+void AIGPlayer::CallOnEvent(const FString& Value)
+{
+	OnEventCalled.Broadcast(Value);
+}

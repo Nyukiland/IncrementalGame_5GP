@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "IGCapacityTrigger.generated.h"
 
+class AIGPlayer;
 class UIGStatContainer;
 
 UCLASS(Abstract, Blueprintable)
@@ -16,8 +17,8 @@ public:
 
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Trigger")
-	void InitTrigger();
-	virtual void InitTrigger_Implementation();
+	void InitTrigger(AIGPlayer* Player);
+	virtual void InitTrigger_Implementation(AIGPlayer* Player);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Trigger")
 	void TickTrigger(float DeltaTime);

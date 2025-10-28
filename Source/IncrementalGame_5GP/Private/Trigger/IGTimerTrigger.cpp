@@ -1,9 +1,9 @@
 #include "Trigger/IGTimerTrigger.h"
 #include "IGStatContainer.h"
 
-void UIGTimerTrigger::InitTrigger_Implementation()
+void UIGTimerTrigger::InitTrigger_Implementation(AIGPlayer* Player)
 {
-	Super::InitTrigger_Implementation();
+	Super::InitTrigger_Implementation(Player);
 
 	MaxTimer = NewObject<UIGStatContainer>(this, MaxTimerSubClass);
 	MaxTimer->Init();

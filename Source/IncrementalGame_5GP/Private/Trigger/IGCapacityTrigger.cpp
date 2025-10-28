@@ -2,7 +2,7 @@
 
 class UIGStatContainer;
 
-void UIGCapacityTrigger::InitTrigger_Implementation()
+void UIGCapacityTrigger::InitTrigger_Implementation(AIGPlayer* Player)
 {
 	
 }

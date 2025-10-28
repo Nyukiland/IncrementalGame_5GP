@@ -76,7 +76,7 @@ void UIGCapacityComponent::InitStateComponent_Implementation(AIGPlayer* Controll
 			continue;
 
 		UIGCapacityTrigger* Trigger = NewObject<UIGCapacityTrigger>(this, TriggerClass);
-		Trigger->InitTrigger();
+		Trigger->InitTrigger(Owner);
 		Triggers.Add(Trigger);
 	}
 
