@@ -1,8 +1,9 @@
 #include "IGMoneyComponent.h"
 
-void UIGMoneyComponent::DisableStateComponent_Implementation()
+void UIGMoneyComponent::ResetComponent_Implementation()
 {
-	Super::DisableStateComponent_Implementation();
+	Super::ResetComponent_Implementation();
+
 	Money = 0;
 }
 

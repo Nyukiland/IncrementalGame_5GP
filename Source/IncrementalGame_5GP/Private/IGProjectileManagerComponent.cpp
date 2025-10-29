@@ -95,6 +95,11 @@ void UIGProjectileManagerComponent::TickStateComponent_Implementation(float Delt
 	ProjectileMeshInstances->MarkRenderStateDirty();
 }
 
+void UIGProjectileManagerComponent::ResetComponent_Implementation()
+{
+	ProjectilesDatas.Empty();
+}
+
 void UIGProjectileManagerComponent::AddProjectile(FString ID, FVector Start, FVector End, float DurationValue,
                                                   FColor Color)
 {

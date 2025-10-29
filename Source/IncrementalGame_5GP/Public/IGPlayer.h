@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "MathEquation/IGMathEquations.h"
 #include "IGPlayer.generated.h"
 
 class UIGState;
@@ -16,9 +17,6 @@ class INCREMENTALGAME_5GP_API AIGPlayer : public APawn
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player")
-	TSubclassOf<UIGState> DefaultState;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player")
 	TArray<TSubclassOf<UIGStateComponent>> DefaultActiveComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
@@ -26,12 +24,32 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Player")
 	FOnEventCalled OnEventCalled;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
+	int CurrentPrestige;
+	
+protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player")
+	TSubclassOf<UIGStateComponent> PrestigeKillNeededMathSubClass;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player")
+	TSubclassOf<UIGStateComponent> SlotCountMathSubClass;
 	
 private:
 	int ActiveComponentCount = 0;
-	UPROPERTY()
-	TObjectPtr<UIGState> CurrentState;
 
+	UPROPERTY()
+	TObjectPtr<UIGMathEquations> PrestigeKillNeededMath;
+
+	UPROPERTY()
+	TObjectPtr<UIGMathEquations> SlotCountMath;
+	
+	UPROPERTY()
+	float PrestigeKillNeeded;
+
+	UPROPERTY()
+	int MaxSlotCount;
+	
 protected:
 	virtual void BeginPlay() override;
 
@@ -53,8 +71,17 @@ public:
 	void DeactivateStateComponent(UIGStateComponent* Comp, int Index);
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
-	void ChangeState(TSubclassOf<UIGState> StateClass);
+	void CallOnEvent(const FString& Value);
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
-	void CallOnEvent(const FString& Value);
+	bool CheckPrestigeUpgrade(int KillCount);
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
+	bool CheckSlotFull();
+	
+	UFUNCTION(BlueprintCallable, Category = "Player")
+	void UpgradePrestige();
+	
+	UFUNCTION(BlueprintCallable, Category = "Player")
+	void ResetGame(int NewPrestige);
 };

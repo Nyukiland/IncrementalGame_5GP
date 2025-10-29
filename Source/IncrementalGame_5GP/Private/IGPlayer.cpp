@@ -1,14 +1,34 @@
 #include "IGPlayer.h"
+
 #include "Components/ActorComponent.h"
 #include "IGStateComponent.h"
-#include "IGState.h"
 
 void AIGPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ChangeState(DefaultState);
+	CurrentPrestige = 0;
+	
+	if (!PrestigeKillNeededMathSubClass)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGPlayer] PrestigeKillNeededSubClass not properly set"))
+	}
+	else
+	{
+		PrestigeKillNeededMath = NewObject<UIGMathEquations>(this, PrestigeKillNeededMathSubClass);
+		PrestigeKillNeeded = PrestigeKillNeededMath->GetValue(CurrentPrestige);
+	}
 
+	if (!SlotCountMathSubClass)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGPlayer] SlotCountMathSubClass not properly set"))
+	}
+	else
+	{
+		SlotCountMath = NewObject<UIGMathEquations>(this, SlotCountMathSubClass);	
+		MaxSlotCount = SlotCountMath->GetValue(CurrentPrestige);
+	}
+	
 	TArray<UActorComponent*> Components;
 	GetComponents(Components);
 
@@ -41,11 +61,6 @@ void AIGPlayer::BeginPlay()
 void AIGPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (CurrentState)
-	{
-		CurrentState->OnTick(DeltaTime);
-	}
 
 	for (int i = 0; i < ActiveComponentCount; i++)
 	{
@@ -119,32 +134,52 @@ void AIGPlayer::DeactivateStateComponent(UIGStateComponent* Comp, int Index)
 	ActiveComponentCount--;
 }
 
-void AIGPlayer::ChangeState(TSubclassOf<UIGState> StateClass)
-{
-	if (!*StateClass)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ChangeState called with null class."));
-		return;
-	}
-
-	if (CurrentState)
-	{
-		CurrentState->OnExit();
-		CurrentState = nullptr;
-	}
-
-	UIGState* NewState = NewObject<UIGState>(this, StateClass);
-	if (!NewState)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to create state of class: %s"), *StateClass->GetName());
-		return;
-	}
-
-	NewState->OnEnter(this);
-	CurrentState = NewState;
-}
-
 void AIGPlayer::CallOnEvent(const FString& Value)
 {
 	OnEventCalled.Broadcast(Value);
+}
+
+bool AIGPlayer::CheckPrestigeUpgrade(int KillCount)
+{
+	return KillCount >= PrestigeKillNeeded;
+}
+
+bool AIGPlayer::CheckSlotFull()
+{
+	return ActiveComponentCount - DefaultActiveComponent.Num() < MaxSlotCount;
+}
+
+void AIGPlayer::UpgradePrestige()
+{
+	ResetGame(CurrentPrestige + 1);
+}
+
+void AIGPlayer::ResetGame(int NewPrestige)
+{
+	CurrentPrestige = NewPrestige;
+
+	if (PrestigeKillNeededMath)
+		PrestigeKillNeeded = PrestigeKillNeededMath->GetValue(CurrentPrestige);
+
+	if (SlotCountMath)
+		MaxSlotCount = (int)SlotCountMath->GetValue(CurrentPrestige);
+
+	for (int i = ActiveComponentCount - 1; i >= 0; i--)
+	{
+		UIGStateComponent* Component = StateComponents[i];
+		
+		if (!Component)
+			continue;
+		
+		Component->ResetComponent();
+
+		for (TSubclassOf<UIGStateComponent> DefaultComp : DefaultActiveComponent)
+		{
+			if (!Component->IsA(DefaultComp))
+			{
+				DeactivateStateComponent(Component, i);
+				break;
+			}
+		}
+	}
 }

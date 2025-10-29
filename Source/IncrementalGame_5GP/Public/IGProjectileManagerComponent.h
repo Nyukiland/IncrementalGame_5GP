@@ -53,6 +53,7 @@ public:
 	virtual void InitStateComponent_Implementation(AIGPlayer* Controller) override;
 	virtual void EnableStateComponent_Implementation() override;
 	virtual void TickStateComponent_Implementation(float DeltaTime) override;
+	virtual void ResetComponent_Implementation() override;
 
 	void AddProjectile(FString ID, FVector Start, FVector End, float DurationValue, FColor Color);
 };

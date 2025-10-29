@@ -13,7 +13,8 @@ private:
 	int Money;
 
 public:
-	virtual void DisableStateComponent_Implementation() override;
+	virtual void ResetComponent_Implementation() override;
+	
 	UFUNCTION(BlueprintCallable, Category = "MoneyComponent")
 	int CurrentMoney();
 	UFUNCTION(BlueprintCallable, Category = "MoneyComponent")

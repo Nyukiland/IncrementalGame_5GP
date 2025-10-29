@@ -146,7 +146,7 @@ TArray<UIGStatContainer*> UIGCapacityComponent::GetStats_Implementation()
 	return Stats;
 }
 
-void UIGCapacityComponent::ResetCapacity_Implementation()
+void UIGCapacityComponent::ResetComponent_Implementation()
 {
 	CapacityData.ResetData();
 	

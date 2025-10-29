@@ -37,4 +37,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "StateComponent")
 	void TickStateComponent(float DeltaTime);
 	virtual void TickStateComponent_Implementation(float DeltaTime);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity")
+	void ResetComponent();
+	virtual void ResetComponent_Implementation();
 };

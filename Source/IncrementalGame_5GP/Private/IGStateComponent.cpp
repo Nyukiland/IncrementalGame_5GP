@@ -23,3 +23,8 @@ void UIGStateComponent::DisableStateComponent_Implementation()
 void UIGStateComponent::TickStateComponent_Implementation(float DeltaTime)
 {
 }
+
+void UIGStateComponent::ResetComponent_Implementation()
+{
+	
+}
