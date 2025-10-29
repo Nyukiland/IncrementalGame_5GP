@@ -37,3 +37,9 @@ TArray<UIGStatContainer*> UIGDealDamageEffect::GetStats_Implementation()
 
 	return Stats;
 }
+
+void UIGDealDamageEffect::ResetEffectCompletly_Implementation()
+{
+	if (DamageStat)
+		DamageStat->ResetStat();
+}

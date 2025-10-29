@@ -31,4 +31,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Trigger")
 	TArray<UIGStatContainer*> GetStats();
 	virtual TArray<UIGStatContainer*> GetStats_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Trigger")
+	void ResetTriggerCompletly();
+	virtual void ResetTriggerCompletly_Implementation();
 };

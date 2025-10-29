@@ -85,6 +85,18 @@ TArray<UIGStatContainer*> UIGRepeatEffect::GetStats_Implementation()
 	return Stats;
 }
 
+void UIGRepeatEffect::ResetEffectCompletly_Implementation()
+{
+	if (RepeatStat)
+		RepeatStat->ResetStat();
+
+	for (UIGCapacityEffect* Effect : Effects)
+	{
+		if (Effect)
+		Effect->ResetEffectCompletly();
+	}
+}
+
 bool UIGRepeatEffect::ExecuteEffect(FCapacityData& CapacityData)
 {
 	int ValidEffectCount = 0;

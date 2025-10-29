@@ -31,3 +31,10 @@ TArray<UIGStatContainer*> UIGTimerTrigger::GetStats_Implementation()
 	Stats.Add(MaxTimer);
 	return Stats;
 }
+
+void UIGTimerTrigger::ResetTriggerCompletly_Implementation()
+{
+	Timer = 0;
+	bTriggerReady = false;
+	MaxTimer->ResetStat();
+}

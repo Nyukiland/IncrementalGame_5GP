@@ -21,3 +21,8 @@ TArray<UIGStatContainer*> UIGCapacityTrigger::GetStats_Implementation()
 {
 	return TArray<UIGStatContainer*>();
 }
+
+void UIGCapacityTrigger::ResetTriggerCompletly_Implementation()
+{
+	bTriggerReady = false;
+}

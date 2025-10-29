@@ -38,3 +38,10 @@ bool UIGStatContainer::TryUpgrade(int Money)
 	
 	return false;
 }
+
+void UIGStatContainer::ResetStat()
+{
+	CurrentUpgradeCount = 0;
+	CurrentPrice = PriceEquation->GetValue(CurrentUpgradeCount);
+	CurrentValue = UpgradeEquation->GetValue(CurrentUpgradeCount);
+}

@@ -72,3 +72,9 @@ TArray<UIGStatContainer*> UIGGetClosestEnemyInAreaEffect::GetStats_Implementatio
 
 	return Stats;
 }
+
+void UIGGetClosestEnemyInAreaEffect::ResetEffectCompletly_Implementation()
+{
+	if (Area)
+		Area->ResetStat();
+}

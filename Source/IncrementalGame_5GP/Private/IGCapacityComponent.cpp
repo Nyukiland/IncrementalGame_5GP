@@ -145,3 +145,20 @@ TArray<UIGStatContainer*> UIGCapacityComponent::GetStats_Implementation()
 
 	return Stats;
 }
+
+void UIGCapacityComponent::ResetCapacity_Implementation()
+{
+	CapacityData.ResetData();
+	
+	for (UIGCapacityEffect* Effect : Effects)
+	{
+		if (Effect)
+			Effect->ResetEffectCompletly();
+	}
+
+	for (UIGCapacityTrigger* Trigger : Triggers)
+	{
+		if (Trigger)
+			Trigger->ResetTriggerCompletly();
+	}
+}

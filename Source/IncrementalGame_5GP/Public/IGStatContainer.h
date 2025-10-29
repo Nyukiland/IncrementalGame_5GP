@@ -45,4 +45,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool TryUpgrade(int Money);
+
+	UFUNCTION(BlueprintCallable)
+	void ResetStat();
 };

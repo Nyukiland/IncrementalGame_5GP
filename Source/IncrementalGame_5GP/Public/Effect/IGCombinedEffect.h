@@ -23,4 +23,5 @@ public:
 	virtual void InitEffect_Implementation() override;
 	virtual void ApplyEffect_Implementation(FCapacityData& CapacityData) override;
 	virtual TArray<UIGStatContainer*> GetStats_Implementation() override;
+	virtual void ResetEffectCompletly_Implementation() override;
 };

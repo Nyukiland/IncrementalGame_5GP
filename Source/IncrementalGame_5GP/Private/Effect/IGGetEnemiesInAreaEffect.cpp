@@ -52,3 +52,9 @@ TArray<UIGStatContainer*> UIGGetEnemiesInAreaEffect::GetStats_Implementation()
 	Stats.Add(AreaSize);
 	return Stats;
 }
+
+void UIGGetEnemiesInAreaEffect::ResetEffectCompletly_Implementation()
+{
+	if (AreaSize)
+		AreaSize->ResetStat();
+}

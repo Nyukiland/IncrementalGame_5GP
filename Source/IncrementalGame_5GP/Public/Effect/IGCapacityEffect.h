@@ -30,4 +30,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Effect")
 	TArray<UIGStatContainer*> GetStats();
 	virtual TArray<UIGStatContainer*> GetStats_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity|Effect")
+	void ResetEffectCompletly();
+	virtual void ResetEffectCompletly_Implementation();
 };

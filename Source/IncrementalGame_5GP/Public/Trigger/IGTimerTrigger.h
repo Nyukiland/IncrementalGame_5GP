@@ -25,4 +25,5 @@ public:
 	virtual void TickTrigger_Implementation(float DeltaTime) override;
 	virtual void ResetTrigger_Implementation() override;
 	virtual TArray<UIGStatContainer*> GetStats_Implementation() override;
+	virtual void ResetTriggerCompletly_Implementation() override;
 };

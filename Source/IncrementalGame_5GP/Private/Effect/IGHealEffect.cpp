@@ -40,3 +40,9 @@ TArray<UIGStatContainer*> UIGHealEffect::GetStats_Implementation()
 	
 	return Stats;
 }
+
+void UIGHealEffect::ResetEffectCompletly_Implementation()
+{
+	if (HealStat)
+		HealStat->ResetStat();
+}

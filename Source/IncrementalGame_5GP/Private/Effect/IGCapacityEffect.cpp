@@ -16,3 +16,8 @@ TArray<UIGStatContainer*> UIGCapacityEffect::GetStats_Implementation()
 {
 	return TArray<UIGStatContainer*>();
 }
+
+void UIGCapacityEffect::ResetEffectCompletly_Implementation()
+{
+	
+}

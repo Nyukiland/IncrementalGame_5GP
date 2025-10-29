@@ -14,10 +14,10 @@ void UIGCombinedEffect::InitEffect_Implementation()
 			|| EffectSubClass == UIGRepeatEffect::StaticClass())
 		{
 			UE_LOG(LogTemp, Error, TEXT(
-				"[CombinedEffect] Please do not set a RepeatEffect or a CombineEffect in a combined effect"));
+				       "[CombinedEffect] Please do not set a RepeatEffect or a CombineEffect in a combined effect"));
 			continue;
 		}
-		
+
 		UIGCapacityEffect* Effect = NewObject<UIGCapacityEffect>(this, EffectSubClass);
 		Effect->Duration = Duration;
 		Effect->InitEffect();
@@ -31,10 +31,10 @@ void UIGCombinedEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 
 	if (LocalCapacityData.Manager == nullptr)
 		LocalCapacityData = CapacityData;
-	
+
 	LocalCapacityData.ResetData();
-	
-	for (UIGCapacityEffect* Effect :  Effects)
+
+	for (UIGCapacityEffect* Effect : Effects)
 	{
 		if (!Effect)
 			continue;
@@ -45,7 +45,7 @@ void UIGCombinedEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 
 	if (LocalCapacityData.PreviousAimPosition != FVector::ZeroVector)
 		CapacityData.PreviousAimPosition = LocalCapacityData.PreviousAimPosition;
-	
+
 	if (LocalCapacityData.CurrentAimPositon != FVector::ZeroVector)
 		CapacityData.CurrentAimPositon = LocalCapacityData.CurrentAimPositon;
 
@@ -66,4 +66,13 @@ TArray<UIGStatContainer*> UIGCombinedEffect::GetStats_Implementation()
 	}
 
 	return Stats;
+}
+
+void UIGCombinedEffect::ResetEffectCompletly_Implementation()
+{
+	for (UIGCapacityEffect* Effect : Effects)
+	{
+		if (Effect)
+			Effect->ResetEffectCompletly();
+	}
 }
