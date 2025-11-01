@@ -5,11 +5,60 @@
 #include "IGMathHelper.h"
 #include "Components/InstancedStaticMeshComponent.h"
 
+void UIGGameManager::InitializeManager(UInstancedStaticMeshComponent* EnemiesMeshInstancesVar, UIGMathEquations* EnemyLifeVar,
+		UIGMathEquations* EnemySpeedVar, UIGMathEquations* EnemySpawnVar, UIGMathEquations* EnemyMaxSpawnVar, UIGMathEquations* ZoneVar)
+{
+	CurrentZoneFrameInvincibility = MaxZoneFrameInvincibility;
+
+	EnemiesMeshInstances = EnemiesMeshInstancesVar;
+	EnemyHealth = EnemyLifeVar;
+	EnemySpeed = EnemySpeedVar;
+	SpawnRateCurve = EnemySpawnVar;
+	MaxSpawnCountCurve = EnemyMaxSpawnVar;
+	DecreaseZoneCurve = ZoneVar;
+
+	FString NullParams;
+
+	if (!EnemiesMeshInstances)
+		NullParams += TEXT("EnemiesMeshInstances ");
+	if (!EnemyHealth)
+		NullParams += TEXT("EnemyHealth ");
+	if (!EnemySpeed)
+		NullParams += TEXT("EnemySpeed ");
+	if (!SpawnRateCurve)
+		NullParams += TEXT("SpawnRateCurve ");
+	if (!MaxSpawnCountCurve)
+		NullParams += TEXT("MaxSpawnCountCurve ");
+	if (!DecreaseZoneCurve)
+		NullParams += TEXT("DecreaseZoneCurve ");
+
+	if (!NullParams.IsEmpty())
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGGameManager] InitializeManager failed - null parameters: %s"), *NullParams);
+	}
+}
+
 void UIGGameManager::Tick(float DeltaTime)
 {
+	if (!bInitialized)
+		return;
+		
 	if (CurrentZoneFrameInvincibility < MaxZoneFrameInvincibility)
 		CurrentZoneFrameInvincibility++;
 
+	Timer += DeltaTime;
+	TimerScale += DeltaTime;
+
+	if (Timer > 2)
+	{
+		FTransform Transform;
+		Transform.SetScale3D(FVector(1, 1, 1));
+		Transform.SetRotation(FQuat(FRotator(0, 0, 0)));
+		Transform.SetLocation(FVector(0, 0, 0));
+		SpawnEnemy(Transform);
+		Timer = 0;	
+	}
+	
 	if (!EnemiesMeshInstances) return;
 
 	ClosestEnemyIndex = -1;
@@ -45,81 +94,16 @@ TStatId UIGGameManager::GetStatId() const
 	RETURN_QUICK_DECLARE_CYCLE_STAT(UIGGameManager, STATGROUP_Tickables);
 }
 
-void UIGGameManager::OnWorldBeginPlay(UWorld& InWorld)
-{
-	Super::OnWorldBeginPlay(InWorld);
-
-	if (DecreaseZoneCurveSubClass)
-	{
-		DecreaseZoneCurve = NewObject<UIGMathEquations>(this, DecreaseZoneCurveSubClass);
-	}
-
-	if (EnemyHealthSubClass)
-	{
-		EnemyHealth = NewObject<UIGMathEquations>(this, EnemyHealthSubClass);
-	}
-
-	if (EnemySpeedSubClass)
-	{
-		EnemySpeed = NewObject<UIGMathEquations>(this, EnemySpeedSubClass);
-	}
-
-	if (MaxSpawnCountCurveSubClass)
-	{
-		MaxSpawnCountCurve = NewObject<UIGMathEquations>(this, MaxSpawnCountCurveSubClass);
-	}
-
-	if (SpawnRateCurveSubClass)
-	{
-		SpawnRateCurve = NewObject<UIGMathEquations>(this, SpawnRateCurveSubClass);
-	}
-	
-	CurrentZoneFrameInvincibility = MaxZoneFrameInvincibility;
-
-	AActor* MeshOwnerActor = InWorld.SpawnActor<AActor>(AActor::StaticClass());
-	EnemiesMeshInstances = NewObject<UInstancedStaticMeshComponent>(MeshOwnerActor);
-	EnemiesMeshInstances->AttachToComponent(MeshOwnerActor->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
-	EnemiesMeshInstances->RegisterComponent();
-
-	if (PlaneMesh)
-	{
-		EnemiesMeshInstances->SetStaticMesh(PlaneMesh);
-	}
-
-	if (EnemyVisu && BaseMaterial)
-	{
-		UMaterialInstanceDynamic* DynMat = UMaterialInstanceDynamic::Create(BaseMaterial, this);
-		DynMat->SetTextureParameterValue(FName("SpriteTexture"), EnemyVisu);
-		EnemiesMeshInstances->SetMaterial(0, DynMat);
-	}
-
-
-	EnemiesMeshInstances->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	EnemiesMeshInstances->SetCollisionProfileName(TEXT("EnemyOnly"));
-}
-
-void UIGGameManager::InitializeEnemiesMeshInstances(UStaticMesh* Mesh, UMaterialInterface* Material)
-{
-	if (!GetWorld()) return;
-
-	// The holder contains the EnemiesMeshInstances because the GameManager cannot hold any ActorComponent
-	AActor* Holder = GetWorld()->SpawnActor<AActor>(AActor::StaticClass());
-
-	EnemiesMeshInstances = NewObject<UInstancedStaticMeshComponent>(Holder);
-	EnemiesMeshInstances->RegisterComponent();
-	EnemiesMeshInstances->SetStaticMesh(Mesh);
-	if (Material)
-	{
-		EnemiesMeshInstances->SetMaterial(0, Material);
-	}
-
-	Holder->SetRootComponent(EnemiesMeshInstances);
-}
-
 int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 {
-	if (!EnemiesMeshInstances) return INDEX_NONE;
+	if (!EnemyHealth || !EnemySpeed)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGGameManager] Can't spawn enemy, Math data not set"));
+		return INDEX_NONE;
+	}
 
+	if (!EnemiesMeshInstances) return INDEX_NONE;
+	
 	int32 NewEnemyIndex;
 	if (InactiveEnemiesIndices.Num() <= 0)
 		// New enemy
@@ -141,11 +125,11 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 
 	FVector BaseDirection = UIGMathHelper::GetRandomPointInCircle();
 	FEnemyData& NewEnemyData = EnemiesData[NewEnemyIndex];
-	NewEnemyData.Init(Origin + BaseDirection, EnemyHealth->GetValue(0), BaseDirection, EnemySpeed->GetValue(0),
-	                  InstanceId);
 	NewEnemyData.ActiveEnemiesIndices = &ActiveEnemiesIndices;
 	NewEnemyData.InactiveEnemiesIndices = &InactiveEnemiesIndices;
 	NewEnemyData.EnemiesData = &EnemiesData;
+	NewEnemyData.Init(Origin + BaseDirection, EnemyHealth->GetValue(TimerScale), BaseDirection,
+		EnemySpeed->GetValue(TimerScale), InstanceId);
 
 	EnemiesMeshInstances->UpdateInstanceTransform(InstanceId, NewEnemyData.Transform, true, true, true);
 	InstanceIdToEnemyIndex.Add(InstanceId, NewEnemyIndex);
@@ -166,14 +150,14 @@ uint32 UIGGameManager::GetFarthestEnemy() const
 {
 	if (ActiveEnemiesIndices.Num() == 0) return -1;
 
-	return ClosestEnemyIndex;
+	return FarthestEnemyIndex;
 }
 
 uint32 UIGGameManager::GetClosestEnemy() const
 {
 	if (ActiveEnemiesIndices.Num() == 0) return -1;
 
-	return FarthestEnemyIndex;
+	return ClosestEnemyIndex;
 }
 
 uint32 UIGGameManager::GetRandomEnemy() const
@@ -202,4 +186,10 @@ void UIGGameManager::ChangeZoneSize(float ChangeFactor)
 	{
 		//End Game
 	}
+}
+
+void UIGGameManager::ResetManager()
+{
+	Timer = 0;
+	TimerScale = 0;
 }

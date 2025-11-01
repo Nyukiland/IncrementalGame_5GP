@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "IGEnemyData.h"
+#include "MathEquation/IGMathEquations.h"
 #include "IGGameManager.generated.h"
 
 class UIGMathEquations;
@@ -27,37 +28,22 @@ private:
 	
 	UPROPERTY()
 	TObjectPtr<UIGMathEquations> DecreaseZoneCurve;
+
+	float Timer = 0;
+
+	float TimerScale = 0;
+
+	bool bInitialized = false;
 	
 protected:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Enemy")
-	TSubclassOf<UIGMathEquations> MaxSpawnCountCurveSubClass;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Enemy")
-	TSubclassOf<UIGMathEquations> SpawnRateCurveSubClass;
-
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Enemy")
 	int CurrentMaxEnemyCount;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Enemy")
 	float CurrentEnemySpawnRate;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Enemy")
-	TSubclassOf<UIGMathEquations> EnemyHealthSubClass;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Enemy")
-	TSubclassOf<UIGMathEquations> EnemySpeedSubClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-	TObjectPtr<UTexture2D> EnemyVisu;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy")
-	TObjectPtr<UStaticMesh> PlaneMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy")
-	TObjectPtr<UMaterialInterface> BaseMaterial;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy")
-	UInstancedStaticMeshComponent* EnemiesMeshInstances;
+	TObjectPtr<UInstancedStaticMeshComponent> EnemiesMeshInstances;
 	
 	TArray<int32> InactiveEnemiesIndices;
 
@@ -65,9 +51,6 @@ protected:
 	FVector Origin;
 	int32 CellSize = 1000; //arbitrary, needs testing, can be modified at runtime depending on the enemies density
 	TMap<FIntPoint, TArray<int32>> Grid;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Zone")
-	TSubclassOf<UIGMathEquations> DecreaseZoneCurveSubClass;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Zone")
 	float MinZoneRadius;
@@ -93,11 +76,12 @@ public:
 	TMap<int32, int32> InstanceIdToEnemyIndex;
 	
 public:
+	void InitializeManager(UInstancedStaticMeshComponent* EnemiesMeshInstancesVar, UIGMathEquations* EnemyLifeVar,
+		UIGMathEquations* EnemySpeedVar, UIGMathEquations* EnemySpawnVar, UIGMathEquations* EnemyMaxSpawnVar, UIGMathEquations* ZoneVar);
 	virtual void Tick(float DeltaTime) override;
 	virtual bool IsTickable() const override { return true; }
 	virtual TStatId GetStatId() const override;
 
-	void InitializeEnemiesMeshInstances(UStaticMesh* Mesh, UMaterialInterface* Material);
 	int32 SpawnEnemy(const FTransform& SpawnTransform);
 	void KillEnemy(int EnemyIndex);
 	FORCEINLINE FEnemyData& GetEnemy(int32 Index) { return EnemiesData[Index]; }
@@ -108,6 +92,5 @@ public:
 
 	void ChangeZoneSize(float ChangeFactor);
 
-protected:
-	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
+	void ResetManager();
 };
