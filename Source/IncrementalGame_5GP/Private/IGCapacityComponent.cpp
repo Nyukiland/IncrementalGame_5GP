@@ -24,7 +24,7 @@ bool UIGCapacityComponent::ExecuteEffect(float DeltaTime)
 
 	for (UIGCapacityEffect* Effect : Effects)
 	{
-		if (!Effect || Effect->Timer >= Effect->Duration)
+		if (!Effect || !IsValid(Effect) || Effect->Timer >= Effect->Duration)
 		{
 			ValidEffectCount++;
 			continue;
@@ -51,7 +51,7 @@ bool UIGCapacityComponent::CheckTriggers(float DeltaTime)
 
 	for (UIGCapacityTrigger* Trigger : Triggers)
 	{
-		if (!Trigger || Trigger->bTriggerReady)
+		if (!Trigger || !IsValid(Trigger) || Trigger->bTriggerReady)
 		{
 			TriggerValid++;
 			continue;
@@ -113,12 +113,13 @@ void UIGCapacityComponent::TickStateComponent_Implementation(float DeltaTime)
 		{
 			for (UIGCapacityTrigger* Trigger : Triggers)
 			{
-				if (!Trigger) continue;
+				if (!Trigger || !IsValid(Trigger)) continue;
 				Trigger->ResetTrigger();
 			}
 
 			for (UIGCapacityEffect* Effect : Effects)
 			{
+				if (!Effect || !IsValid(Effect)) continue;
 				Effect->Timer = -1;
 			}
 

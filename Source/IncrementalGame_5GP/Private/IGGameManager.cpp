@@ -35,7 +35,10 @@ void UIGGameManager::InitializeManager(UInstancedStaticMeshComponent* EnemiesMes
 	if (!NullParams.IsEmpty())
 	{
 		UE_LOG(LogTemp, Error, TEXT("[IGGameManager] InitializeManager failed - null parameters: %s"), *NullParams);
+		return;
 	}
+
+	bInitialized = true;
 }
 
 void UIGGameManager::Tick(float DeltaTime)

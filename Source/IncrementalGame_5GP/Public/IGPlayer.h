@@ -30,10 +30,10 @@ public:
 	
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player")
-	TSubclassOf<UIGStateComponent> PrestigeKillNeededMathSubClass;
+	TSubclassOf<UIGMathEquations> PrestigeKillNeededMathSubClass;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player")
-	TSubclassOf<UIGStateComponent> SlotCountMathSubClass;
+	TSubclassOf<UIGMathEquations> SlotCountMathSubClass;
 	
 private:
 	int ActiveComponentCount = 0;

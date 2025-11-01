@@ -62,12 +62,33 @@ bool FProjectileData::Update(float DeltaTime, FVector& CurrentPos, FVector& Curr
 
 void UIGProjectileManagerComponent::InitStateComponent_Implementation(AIGPlayer* Controller)
 {
-	ProjectileMeshInstances = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("InstancedMesh"));
+	Super::InitStateComponent_Implementation(Controller);
+	
+	ProjectileMeshInstances = NewObject<UInstancedStaticMeshComponent>(this);
 	ProjectileMeshInstances->SetupAttachment(Owner->GetRootComponent());
 	ProjectileMeshInstances->RegisterComponent();
 	
-	ProjectileMeshInstances->SetStaticMesh(ProjectileMesh);
-	ProjectileMeshInstances->NumCustomDataFloats = 4;
+	if (PlaneMesh)
+	{
+		ProjectileMeshInstances->SetStaticMesh(PlaneMesh);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGProjectileManagerComponent] PlaneMesh not properly set up"));
+		return;
+	}
+
+	if (ProjectileVisu && BaseMaterial)
+	{
+		UMaterialInstanceDynamic* DynMat = UMaterialInstanceDynamic::Create(BaseMaterial, this);
+		DynMat->SetTextureParameterValue(FName("SpriteTexture"), ProjectileVisu);
+		ProjectileMeshInstances->SetMaterial(0, DynMat);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGProjectileManagerComponent] ProjectileVisu or BaseMaterial not properly set up"));
+		return;
+	}
 }
 
 void UIGProjectileManagerComponent::EnableStateComponent_Implementation()

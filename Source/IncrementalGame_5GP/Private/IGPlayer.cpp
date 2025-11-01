@@ -1,5 +1,6 @@
 #include "IGPlayer.h"
 
+#include "IGGameManager.h"
 #include "Components/ActorComponent.h"
 #include "IGStateComponent.h"
 
@@ -156,6 +157,8 @@ void AIGPlayer::UpgradePrestige()
 
 void AIGPlayer::ResetGame(int NewPrestige)
 {
+	GetWorld()->GetSubsystem<UIGGameManager>()->ResetManager();
+	
 	CurrentPrestige = NewPrestige;
 
 	if (PrestigeKillNeededMath)

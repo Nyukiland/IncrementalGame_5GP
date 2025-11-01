@@ -34,14 +34,20 @@ public:
 	bool Update(float DeltaTime, FVector& CurrentPos, FVector& CurrentScale, FRotator& CurrentRotation);
 };
 
-UCLASS()
-class INCREMENTALGAME_5GP_API UIGProjectileManagerComponent : public UIGCapacityComponent
+UCLASS(Blueprintable)
+class INCREMENTALGAME_5GP_API UIGProjectileManagerComponent : public UIGStateComponent
 {
 	GENERATED_BODY()
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile Manager")
-	TObjectPtr<UStaticMesh> ProjectileMesh;
+	TObjectPtr<UTexture2D> ProjectileVisu;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectile Manager")
+	TObjectPtr<UStaticMesh> PlaneMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectile Manager")
+	TObjectPtr<UMaterialInterface> BaseMaterial;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Manager")
 	TObjectPtr<UInstancedStaticMeshComponent> ProjectileMeshInstances;
