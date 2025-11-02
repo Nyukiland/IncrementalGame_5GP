@@ -19,9 +19,6 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GameManagerInitializer")
-	TSubclassOf<UIGMathEquations> MaxSpawnCountCurveSubClass;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GameManagerInitializer")
 	TSubclassOf<UIGMathEquations> SpawnRateCurveSubClass;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GameManagerInitializer")
@@ -41,6 +38,15 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GameManagerInitializer")
 	TSubclassOf<UIGMathEquations> DecreaseZoneCurveSubClass;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GameManagerInitializer")
+	float ZoneMaxRadius;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GameManagerInitializer")
+	float ZoneMinRadius;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GameManagerInitializer")
+	int InvincibilityFrame;
 	
 protected:
 	virtual void BeginPlay() override;

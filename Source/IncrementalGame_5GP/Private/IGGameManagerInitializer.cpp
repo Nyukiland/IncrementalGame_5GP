@@ -14,7 +14,7 @@ void AIGGameManagerInitializer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (!DecreaseZoneCurveSubClass || !EnemyHealthSubClass || !EnemySpeedSubClass || !MaxSpawnCountCurveSubClass
+	if (!DecreaseZoneCurveSubClass || !EnemyHealthSubClass || !EnemySpeedSubClass
 	|| !SpawnRateCurveSubClass)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[IGGameManagerInitializer] CurveSubclass not properly set up"));
@@ -23,7 +23,6 @@ void AIGGameManagerInitializer::BeginPlay()
 	UIGMathEquations* DecreaseZoneCurve = NewObject<UIGMathEquations>(this, DecreaseZoneCurveSubClass);
 	UIGMathEquations* EnemyHealth = NewObject<UIGMathEquations>(this, EnemyHealthSubClass);
 	UIGMathEquations* EnemySpeed = NewObject<UIGMathEquations>(this, EnemySpeedSubClass);
-	UIGMathEquations* MaxSpawnCountCurve = NewObject<UIGMathEquations>(this, MaxSpawnCountCurveSubClass);
 	UIGMathEquations* SpawnRateCurve = NewObject<UIGMathEquations>(this, SpawnRateCurveSubClass);
 
 	UInstancedStaticMeshComponent* EnemiesMeshInstances = NewObject<UInstancedStaticMeshComponent>(this);
@@ -56,5 +55,6 @@ void AIGGameManagerInitializer::BeginPlay()
 	EnemiesMeshInstances->SetCollisionProfileName(TEXT("EnemyOnly"));
 
 	GetWorld()->GetSubsystem<UIGGameManager>()->InitializeManager(EnemiesMeshInstances,
-		EnemyHealth, EnemySpeed, SpawnRateCurve, MaxSpawnCountCurve, DecreaseZoneCurve);
+		EnemyHealth, EnemySpeed, SpawnRateCurve, DecreaseZoneCurve,
+		ZoneMaxRadius, ZoneMinRadius, InvincibilityFrame);
 }

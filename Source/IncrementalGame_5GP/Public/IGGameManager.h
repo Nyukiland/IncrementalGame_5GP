@@ -8,15 +8,16 @@
 
 class UIGMathEquations;
 
+//Use vector, in case a feedback is required on the position
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyDeath, const FVector&, Value);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLoose);
+
 UCLASS(Blueprintable)
 class INCREMENTALGAME_5GP_API UIGGameManager : public UWorldSubsystem, public FTickableGameObject
 {
 	GENERATED_BODY()
 
 private:
-	UPROPERTY()
-	TObjectPtr<UIGMathEquations> MaxSpawnCountCurve;
-	
 	UPROPERTY()
 	TObjectPtr<UIGMathEquations> SpawnRateCurve;
 	
@@ -36,21 +37,10 @@ private:
 	bool bInitialized = false;
 	
 protected:
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Enemy")
-	int CurrentMaxEnemyCount;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Enemy")
-	float CurrentEnemySpawnRate;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy")
 	TObjectPtr<UInstancedStaticMeshComponent> EnemiesMeshInstances;
 	
 	TArray<int32> InactiveEnemiesIndices;
-
-	// central tower pos, can be replaced by a ref
-	FVector Origin;
-	int32 CellSize = 1000; //arbitrary, needs testing, can be modified at runtime depending on the enemies density
-	TMap<FIntPoint, TArray<int32>> Grid;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Zone")
 	float MinZoneRadius;
@@ -62,22 +52,32 @@ protected:
 	float CurrentZoneRadius;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Zone")
-	float CurrentZoneFrameInvincibility = 0;
+	int CurrentZoneFrameInvincibility = 0;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Zone")
-	float MaxZoneFrameInvincibility = 5;
+	int MaxZoneFrameInvincibility = 5;
 
 	uint32 ClosestEnemyIndex;
 	uint32 FarthestEnemyIndex;
 
 public:
+	UPROPERTY()
 	TArray<FEnemyData> EnemiesData;
+	UPROPERTY()
 	TArray<int32> ActiveEnemiesIndices;
+	UPROPERTY()
 	TMap<int32, int32> InstanceIdToEnemyIndex;
+
+	UPROPERTY(BlueprintAssignable, Category = "Enemy")
+	FOnEnemyDeath OnEnemyDeath;
+
+	UPROPERTY(BlueprintAssignable, Category = "Enemy")
+	FOnLoose OnLoose;
 	
 public:
 	void InitializeManager(UInstancedStaticMeshComponent* EnemiesMeshInstancesVar, UIGMathEquations* EnemyLifeVar,
-		UIGMathEquations* EnemySpeedVar, UIGMathEquations* EnemySpawnVar, UIGMathEquations* EnemyMaxSpawnVar, UIGMathEquations* ZoneVar);
+		UIGMathEquations* EnemySpeedVar, UIGMathEquations* EnemySpawnVar, UIGMathEquations* ZoneVar,
+		float ZoneMaxRadiusVar, float ZoneMinRadiusVar, int InvincibilityFrameVar);
 	virtual void Tick(float DeltaTime) override;
 	virtual bool IsTickable() const override { return true; }
 	virtual TStatId GetStatId() const override;

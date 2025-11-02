@@ -14,6 +14,7 @@ struct FEnemyData
 private:
 	float Health = 0;
 	bool bIsActive_Internal = true;
+	UPROPERTY()
 	FVector Direction = FVector(0, 0, 0);
 	float Speed = 0;
 
@@ -27,15 +28,18 @@ public:
 	TArray<int32>* InactiveEnemiesIndices;
 	TArray<FEnemyData>* EnemiesData;
 
+	UPROPERTY()
 	TArray<FStatus> Statuses;
+	UPROPERTY()
 	TMap<FName, int> StatusCount;
+
+	bool bIsDead = false;
 
 private:
 	void SetActive(bool bNewActive);
 	
 public:
 	void ApplyDamage(float Damage);
-	void Death();
 	bool IsActive() const { return bIsActive_Internal; }
 	void Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed, int32 InstanceId);
 	void Kill();

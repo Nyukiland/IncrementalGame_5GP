@@ -11,7 +11,7 @@ class INCREMENTALGAME_5GP_API UIGLogarithmicEquation : public UIGMathEquations
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Math")
-	FName Equation = "Y = (A * FMath::LogX(B,(C * X) + D)) + E";
+	FName Equation = "Y = (A * FMath::LogX(B,(C * X + 1) + D)) + E";
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Math")
 	float A = 1;

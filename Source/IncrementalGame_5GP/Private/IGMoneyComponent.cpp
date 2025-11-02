@@ -1,5 +1,27 @@
 #include "IGMoneyComponent.h"
 
+#include "IGGameManager.h"
+#include "IGPlayer.h"
+#include "IGStatContainer.h"
+
+void UIGMoneyComponent::InitStateComponent_Implementation(AIGPlayer* Controller)
+{
+	Super::InitStateComponent_Implementation(Controller);
+
+	Controller->GetWorld()->GetSubsystem<UIGGameManager>()->OnEnemyDeath.AddDynamic(this, &UIGMoneyComponent::OnEnemyDeath);
+
+
+	if (MoneyPerKillSubClass)
+	{
+	MoneyPerKill = NewObject<UIGStatContainer>(this, MoneyPerKillSubClass);
+	MoneyPerKill->Init();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGMoneyComponent] MoneyPerKillSubClass is not set up"));			
+	}
+}
+
 void UIGMoneyComponent::ResetComponent_Implementation()
 {
 	Super::ResetComponent_Implementation();
@@ -38,4 +60,12 @@ bool UIGMoneyComponent::TryBuy(int Amount)
 	}
 	
 	return false;
+}
+
+void UIGMoneyComponent::OnEnemyDeath(const FVector& DeathTransform)
+{
+	if (!MoneyPerKill)
+		UE_LOG(LogTemp, Error, TEXT("[IGMoneyComponent] MoneyPerKillSubClass is not set up"));
+	
+	GiveMoney(MoneyPerKill->CurrentValue);
 }

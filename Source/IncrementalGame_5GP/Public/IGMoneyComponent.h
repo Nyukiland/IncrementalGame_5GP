@@ -4,15 +4,25 @@
 #include "IGStateComponent.h"
 #include "IGMoneyComponent.generated.h"
 
+class UIGStatContainer;
+
 UCLASS()
 class INCREMENTALGAME_5GP_API UIGMoneyComponent : public UIGStateComponent
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoneyComponent")
+	TSubclassOf<UIGStatContainer> MoneyPerKillSubClass;
+	
 private:
 	int Money;
 
+	UPROPERTY()
+	TObjectPtr<UIGStatContainer> MoneyPerKill;
+
 public:
+	virtual void InitStateComponent_Implementation(AIGPlayer* Controller) override;
 	virtual void ResetComponent_Implementation() override;
 	
 	UFUNCTION(BlueprintCallable, Category = "MoneyComponent")
@@ -25,4 +35,8 @@ public:
 	bool HasEnoughMoney(int Amount);
 	UFUNCTION(BlueprintCallable, Category = "MoneyComponent")
 	bool TryBuy(int Amount);
+
+private:
+	UFUNCTION()
+	void OnEnemyDeath(const FVector& DeathTransform);
 };

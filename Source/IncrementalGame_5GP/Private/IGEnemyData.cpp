@@ -11,11 +11,9 @@ void FEnemyData::ApplyDamage(float Damage)
 	}
 	
 	Health -= Damage;
-	if (Health <= 0) Death();
-}
 
-void FEnemyData::Death()
-{
+	
+	if (Health <= 0) bIsDead = true;
 }
 
 void FEnemyData::SetActive(bool bNewActive)
@@ -43,6 +41,9 @@ void FEnemyData::SetActive(bool bNewActive)
 		ActiveEnemiesIndices->Remove(InstanceId);
 	if (!InactiveEnemiesIndices->Contains(InstanceId))
 		InactiveEnemiesIndices->Add(InstanceId);
+
+	if (bNewActive)
+		bIsDead = false;
 }
 
 void FEnemyData::Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed, int32 BaseInstanceId)
@@ -53,6 +54,11 @@ void FEnemyData::Init(FVector Origin, float BaseHealth, FVector BaseDirection, f
 	Speed = BaseSpeed;
 	InstanceId = BaseInstanceId;
 
+	FRotator LookAtRotation = Direction.Rotation();
+	LookAtRotation.Yaw += 90.f;
+	Transform.SetRotation(LookAtRotation.Quaternion());
+
+	
 	SetActive(true);
 }
 
@@ -71,7 +77,7 @@ void FEnemyData::UpdatePosition(float DeltaTime, int32& TempInstanceId, FTransfo
                                 float& TempDistanceFromOrigin)
 {
 	float Damage = 0;
-	float DecreaseSpeed = 0;
+	float DecreaseSpeed = 1;
 
 	for (int i = Statuses.Num() - 1; i >= 0; i--)
 	{
@@ -91,7 +97,7 @@ void FEnemyData::UpdatePosition(float DeltaTime, int32& TempInstanceId, FTransfo
 
 	ApplyDamage(Damage);
 	
-	float ElapsedDistance = DeltaTime * FMath::Clamp(Speed - DecreaseSpeed, 0, 1);
+	float ElapsedDistance = DeltaTime * FMath::Clamp(Speed * DecreaseSpeed, 0, Speed);
 	DistanceFromOrigin += ElapsedDistance;
 	Transform.AddToTranslation(Direction * ElapsedDistance);
 

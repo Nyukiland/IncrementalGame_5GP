@@ -10,7 +10,8 @@ bool FStatus::UpdateStatus(float DeltaTime, float& DamageOut, float& SlowFactorO
 	if (bOneShot || Duration <= 0 || Timer >= Duration)
 	{
 		DamageOut += Damage;
-		SlowFactorOut += SlowEffect;
+		if (SlowFactorOut > SlowEffect)
+			SlowFactorOut = SlowEffect;
 		return true;
 	}
 
@@ -20,7 +21,8 @@ bool FStatus::UpdateStatus(float DeltaTime, float& DamageOut, float& SlowFactorO
 	{
 		Timer = 0;
 		DamageOut += Damage;
-		SlowFactorOut += SlowEffect;
+		if (SlowFactorOut > SlowEffect)
+			SlowFactorOut = SlowEffect;
 
 		Duration -= TimeBetweenShots;
 	}

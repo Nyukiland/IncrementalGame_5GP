@@ -6,12 +6,25 @@ void UIGDealDamageEffect::InitEffect_Implementation()
 {
 	Super::InitEffect_Implementation();
 
+	if (DamageStatSubClass)
+	{
 	DamageStat = NewObject<UIGStatContainer>(this, DamageStatSubClass);
 	DamageStat->Init();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGDealDamageEffect] DamageStatSubClass is not set"));
+	}
 }
 
 void UIGDealDamageEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
+	if (!DamageStat)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGDealDamageEffect] DamageStatSubClass is not set"));
+		return;
+	}
+	
 	if (!CapacityData.Manager)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[IGDealDamageEffect] CapacityData.Manager is not set"));
