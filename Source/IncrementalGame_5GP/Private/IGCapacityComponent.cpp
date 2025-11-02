@@ -3,6 +3,7 @@
 #include "Effect/IGCapacityEffect.h"
 #include "IGGameManager.h"
 #include "IGPlayer.h"
+#include "IGProjectileManagerComponent.h"
 
 bool UIGCapacityComponent::CheckValidity()
 {
@@ -88,13 +89,15 @@ void UIGCapacityComponent::InitStateComponent_Implementation(AIGPlayer* Controll
 		Effect->InitEffect();
 		Effects.Add(Effect);
 	}
-
-	CapacityData.Manager = Controller->GetWorld()->GetSubsystem<UIGGameManager>();
-	CapacityData.Player = Controller;
 }
 
 void UIGCapacityComponent::EnableStateComponent_Implementation()
 {
+	CapacityData.Manager = Owner->GetWorld()->GetSubsystem<UIGGameManager>();
+	CapacityData.Player = Owner;
+	
+	CapacityData.ProjectileManager = Cast<UIGProjectileManagerComponent>
+	(Owner->GetStateComponentByClass(UIGProjectileManagerComponent::StaticClass()));
 	CapacityData.ResetData();
 }
 

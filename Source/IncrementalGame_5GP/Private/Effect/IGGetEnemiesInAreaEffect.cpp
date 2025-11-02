@@ -1,18 +1,33 @@
 #include "Effect/IGGetEnemiesInAreaEffect.h"
 #include "IGGameManager.h"
 #include "IGStatContainer.h"
+#include "VectorUtil.h"
+#include "CompGeom/FitOrientedBox2.h"
 #include "Components/InstancedStaticMeshComponent.h"
 
 void UIGGetEnemiesInAreaEffect::InitEffect_Implementation()
 {
 	Super::InitEffect_Implementation();
 
-	AreaSize = NewObject<UIGStatContainer>(this, AreaSizeSubClass);
-	AreaSize->Init();
+	if (AreaSizeSubClass)
+	{
+		AreaSize = NewObject<UIGStatContainer>(this, AreaSizeSubClass);
+		AreaSize->Init();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGGetEnemiesInAreaEffect] AreaSizeSubClass is not set"));
+	}
 }
 
 void UIGGetEnemiesInAreaEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {
+	if (!AreaSize)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[IGGetEnemiesInAreaEffect] AreaSize is not set"));
+		return;
+	}
+	
 	if (!CapacityData.Manager)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[IGGetEnemiesInAreaEffect] CapacityData.Manager is not set"));
@@ -44,6 +59,8 @@ void UIGGetEnemiesInAreaEffect::ApplyEffect_Implementation(FCapacityData& Capaci
 			CapacityData.EnemiesIndex.Add(*EnemyIndexPtr);
 		}
 	}
+
+	CapacityData.LastAreaSize = AreaSize->CurrentValue;
 }
 
 TArray<UIGStatContainer*> UIGGetEnemiesInAreaEffect::GetStats_Implementation()

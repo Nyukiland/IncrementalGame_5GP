@@ -56,6 +56,8 @@ void UIGGetClosestEnemyInAreaEffect::ApplyEffect_Implementation(FCapacityData& C
 			CapacityData.EnemiesIndex.Add(*EnemyIndexPtr);
 		}
 	}
+
+	CapacityData.LastAreaSize = Area->CurrentValue;
 }
 
 TArray<UIGStatContainer*> UIGGetClosestEnemyInAreaEffect::GetStats_Implementation()

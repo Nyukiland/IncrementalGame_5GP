@@ -5,7 +5,6 @@
 
 FProjectileData::FProjectileData()
 {
-	ID = "NONE";
 	Instance = -1;
 	
 	StartPos = FVector(1, 1, 1);
@@ -21,9 +20,8 @@ FProjectileData::FProjectileData()
 	Hold = 0;
 }
 
-FProjectileData::FProjectileData(FString Identifier, int InstanceIndex, FVector Start, FVector End, float DurationValue)
+FProjectileData::FProjectileData(int InstanceIndex, FVector Start, FVector End, float DurationValue)
 {
-	ID = Identifier;
 	Instance = InstanceIndex;
 	StartPos = Start;
 	EndPos = End;
@@ -37,10 +35,9 @@ FProjectileData::FProjectileData(FString Identifier, int InstanceIndex, FVector 
 	EndScale = FVector(1, 1, 1);
 }
 
-FProjectileData::FProjectileData(FString Identifier, int InstanceIndex, FVector Start, FVector End, FVector ScaleStart,
+FProjectileData::FProjectileData(int InstanceIndex, FVector Start, FVector End, FVector ScaleStart,
 	FVector ScaleEnd, float DurationValue, float HoldValue)
 {
-	ID = Identifier;
 	Instance = InstanceIndex;
 	StartPos = Start;
 	EndPos = End;
@@ -55,9 +52,16 @@ FProjectileData::FProjectileData(FString Identifier, int InstanceIndex, FVector 
 
 bool FProjectileData::Update(float DeltaTime, FVector& CurrentPos, FVector& CurrentScale, FRotator& CurrentRotation)
 {
-	//TODO
+	Timer += DeltaTime;
+
+	float T = FMath::Clamp(Timer / Duration, 0.0f, 1.0f);
+
+	CurrentPos = FMath::Lerp(StartPos, EndPos, T);
+	CurrentScale = FMath::Lerp(StartScale, EndScale, T);
+
+	CurrentRotation = Rotation;
 	
-	return true;
+	return Timer > Duration + Hold;
 }
 
 void UIGProjectileManagerComponent::InitStateComponent_Implementation(AIGPlayer* Controller)
@@ -80,6 +84,7 @@ void UIGProjectileManagerComponent::InitStateComponent_Implementation(AIGPlayer*
 
 	if (ProjectileVisu && BaseMaterial)
 	{
+		ProjectileMeshInstances->NumCustomDataFloats = 3;
 		UMaterialInstanceDynamic* DynMat = UMaterialInstanceDynamic::Create(BaseMaterial, this);
 		DynMat->SetTextureParameterValue(FName("SpriteTexture"), ProjectileVisu);
 		ProjectileMeshInstances->SetMaterial(0, DynMat);
@@ -98,17 +103,25 @@ void UIGProjectileManagerComponent::EnableStateComponent_Implementation()
 
 void UIGProjectileManagerComponent::TickStateComponent_Implementation(float DeltaTime)
 {
-	for (int i = ProjectilesDatas.Num() - 1; i >= 0; i--)
+	for (int32 i = ProjectilesDatas.Num() - 1; i >= 0; i--)
 	{
 		FVector Pos;
 		FVector Scale;
 		FRotator Rot;
 
-		if (ProjectilesDatas[i].Update(DeltaTime, Pos, Scale, Rot))
+		bool bStillActive = ProjectilesDatas[i].Update(DeltaTime, Pos, Scale, Rot);
+
+		if (!bStillActive)
 		{
+			AvailableInstanceIndices.Add(ProjectilesDatas[i].Instance);
+
+			FTransform NewTransform(Rot, FVector(-1000, -1000, -1000), FVector(0, 0, 0));
+			ProjectileMeshInstances->UpdateInstanceTransform(ProjectilesDatas[i].Instance, NewTransform, false, true);
 			ProjectilesDatas.RemoveAt(i);
+
+			continue;
 		}
-		
+
 		FTransform NewTransform(Rot, Pos, Scale);
 		ProjectileMeshInstances->UpdateInstanceTransform(ProjectilesDatas[i].Instance, NewTransform, false, true);
 	}
@@ -121,17 +134,50 @@ void UIGProjectileManagerComponent::ResetComponent_Implementation()
 	ProjectilesDatas.Empty();
 }
 
-void UIGProjectileManagerComponent::AddProjectile(FString ID, FVector Start, FVector End, float DurationValue,
-                                                  FColor Color)
+void UIGProjectileManagerComponent::AddProjectile(FVector Start, FVector End, float DurationValue, FColor Color)
 {
-	//TODO
-	
-	int32 Index = ProjectileMeshInstances->AddInstance(Owner->GetTransform());
-	ProjectileMeshInstances->SetCustomDataValue(Index, 0, Color.R, false);
-	ProjectileMeshInstances->SetCustomDataValue(Index, 1, Color.G, false);
-	ProjectileMeshInstances->SetCustomDataValue(Index, 2, Color.B, false);
-	ProjectileMeshInstances->SetCustomDataValue(Index, 3, Color.A, false);
+	int32 Index;
 
-	FProjectileData Data = FProjectileData(ID, Index, Start, End, DurationValue);
+	if (AvailableInstanceIndices.Num() > 0)
+	{
+		Index = AvailableInstanceIndices.Pop();
+		ProjectileMeshInstances->UpdateInstanceTransform(Index, FTransform(Start), false, true);
+	}
+	else
+	{
+		Index = ProjectileMeshInstances->AddInstance(FTransform(Start));
+	}
+
+	ProjectileMeshInstances->SetCustomDataValue(Index, 0, Color.R / 255.0f, false);
+	ProjectileMeshInstances->SetCustomDataValue(Index, 1, Color.G / 255.0f, false);
+	ProjectileMeshInstances->SetCustomDataValue(Index, 2, Color.B / 255.0f, false);
+
+	ProjectileMeshInstances->MarkRenderStateDirty();
+
+	FProjectileData Data(Index, Start, End, DurationValue);
+	ProjectilesDatas.Add(Data);
+}
+
+void UIGProjectileManagerComponent::AddProjectile(FVector Pos, float EndScale, float DurationValue, FColor Color)
+{
+	int32 Index;
+
+	if (AvailableInstanceIndices.Num() > 0)
+	{
+		Index = AvailableInstanceIndices.Pop();
+		ProjectileMeshInstances->UpdateInstanceTransform(Index, FTransform(Pos), false, true);
+	}
+	else
+	{
+		Index = ProjectileMeshInstances->AddInstance(FTransform(Pos));
+	}
+
+	ProjectileMeshInstances->SetCustomDataValue(Index, 0, Color.R / 255.0f, false);
+	ProjectileMeshInstances->SetCustomDataValue(Index, 1, Color.G / 255.0f, false);
+	ProjectileMeshInstances->SetCustomDataValue(Index, 2, Color.B / 255.0f, false);
+
+	ProjectileMeshInstances->MarkRenderStateDirty();
+
+	FProjectileData Data(Index, Pos, Pos, FVector::Zero(), FVector(EndScale, EndScale, EndScale), DurationValue, 0);
 	ProjectilesDatas.Add(Data);
 }

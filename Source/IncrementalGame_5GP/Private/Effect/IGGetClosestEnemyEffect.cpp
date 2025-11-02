@@ -1,5 +1,6 @@
 #include "Effect/IGGetClosestEnemyEffect.h"
 #include "IGGameManager.h"
+#include "IGProjectileManagerComponent.h"
 
 void UIGGetClosestEnemyEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 {

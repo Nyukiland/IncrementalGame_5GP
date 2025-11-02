@@ -10,7 +10,6 @@ struct FProjectileData
 	GENERATED_BODY()
 
 public:
-	FString ID;
 	int Instance;
 
 private:
@@ -28,8 +27,8 @@ private:
 	
 public:
 	FProjectileData();
-	FProjectileData(FString Identifier, int InstanceIndex, FVector Start, FVector End, float DurationValue);
-	FProjectileData(FString Identifier, int InstanceIndex, FVector Start, FVector End, FVector ScaleStart, FVector ScaleEnd, float DurationValue, float HoldValue);
+	FProjectileData(int InstanceIndex, FVector Start, FVector End, float DurationValue);
+	FProjectileData(int InstanceIndex, FVector Start, FVector End, FVector ScaleStart, FVector ScaleEnd, float DurationValue, float HoldValue);
 
 	bool Update(float DeltaTime, FVector& CurrentPos, FVector& CurrentScale, FRotator& CurrentRotation);
 };
@@ -54,6 +53,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile Manager")
 	TArray<FProjectileData> ProjectilesDatas;
+
+private:
+	UPROPERTY()
+	TArray<int> AvailableInstanceIndices;
 	
 public:
 	virtual void InitStateComponent_Implementation(AIGPlayer* Controller) override;
@@ -61,5 +64,6 @@ public:
 	virtual void TickStateComponent_Implementation(float DeltaTime) override;
 	virtual void ResetComponent_Implementation() override;
 
-	void AddProjectile(FString ID, FVector Start, FVector End, float DurationValue, FColor Color);
+	void AddProjectile(FVector Start, FVector End, float DurationValue, FColor Color);
+	void AddProjectile(FVector Pos, float EndScale, float DurationValue, FColor Color);
 };

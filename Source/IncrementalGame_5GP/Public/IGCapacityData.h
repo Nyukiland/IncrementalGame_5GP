@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "IGCapacityData.generated.h"
 
+class UIGProjectileManagerComponent;
 class AIGPlayer;
 class UIGGameManager;
 
@@ -19,13 +20,19 @@ public:
 	FVector PreviousAimPosition;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Capacity")
+	float LastAreaSize;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Capacity")
 	TArray<int> EnemiesIndex;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Capacity")
-	UIGGameManager* Manager;
+	TObjectPtr<UIGGameManager> Manager;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Capacity")
-	AIGPlayer* Player;
+	TObjectPtr<AIGPlayer> Player;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Capacity")
+	TObjectPtr<UIGProjectileManagerComponent> ProjectileManager;
 
 public:
 	void ResetData();
