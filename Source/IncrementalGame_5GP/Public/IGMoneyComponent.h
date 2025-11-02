@@ -11,15 +11,16 @@ class INCREMENTALGAME_5GP_API UIGMoneyComponent : public UIGStateComponent
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "MoneyComponent")
+	TObjectPtr<UIGStatContainer> MoneyPerKill;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoneyComponent")
 	TSubclassOf<UIGStatContainer> MoneyPerKillSubClass;
 	
 private:
 	int Money;
-
-	UPROPERTY()
-	TObjectPtr<UIGStatContainer> MoneyPerKill;
 
 public:
 	virtual void InitStateComponent_Implementation(AIGPlayer* Controller) override;

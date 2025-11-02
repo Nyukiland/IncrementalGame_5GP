@@ -25,13 +25,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
 	TArray<TSubclassOf<UIGCapacityEffect>> EffectsSubClass;
-	
-private:
-	bool CheckValidity();
-
-	bool ExecuteEffect(float DeltaTime);
-
-	bool CheckTriggers(float DeltaTime);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
@@ -49,6 +42,7 @@ public:
 	UPROPERTY()
 	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
 
+public:
 	virtual void InitStateComponent_Implementation(AIGPlayer* Controller) override;
 	
 	virtual void EnableStateComponent_Implementation() override;
@@ -62,4 +56,11 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Capacity")
 	TArray<UIGStatContainer*> GetStats();
 	virtual TArray<UIGStatContainer*> GetStats_Implementation();
+
+private:
+	bool CheckValidity();
+
+	bool ExecuteEffect(float DeltaTime);
+
+	bool CheckTriggers(float DeltaTime);
 };

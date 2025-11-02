@@ -19,10 +19,6 @@ protected:
 public:
 	UPROPERTY()
 	TObjectPtr<UIGStatContainer> HealStat;
-
-private:
-	UPROPERTY()
-	UIGGameManager* Manager;
 	
 public:
 	virtual void InitEffect_Implementation() override;
