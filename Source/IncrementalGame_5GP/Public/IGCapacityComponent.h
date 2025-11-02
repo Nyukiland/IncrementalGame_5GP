@@ -42,9 +42,11 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
 	float Price;
-	
+
+	UPROPERTY()
 	TArray<TObjectPtr<UIGCapacityTrigger>> Triggers;
 
+	UPROPERTY()
 	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
 
 	virtual void InitStateComponent_Implementation(AIGPlayer* Controller) override;

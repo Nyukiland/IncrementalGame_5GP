@@ -13,6 +13,7 @@ private:
 	UPROPERTY()
 	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
 
+	UPROPERTY()
 	FCapacityData LocalCapacityData;
 	
 protected:
