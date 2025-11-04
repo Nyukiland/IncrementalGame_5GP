@@ -50,10 +50,9 @@ void UIGGetClosestEnemyInAreaEffect::ApplyEffect_Implementation(FCapacityData& C
 		UInstancedStaticMeshComponent* ISM = Cast<UInstancedStaticMeshComponent>(Result.Component);
 		if (!ISM) continue;
 
-		int32* EnemyIndexPtr = CapacityData.Manager->InstanceIdToEnemyIndex.Find(Result.Item);
-		if (EnemyIndexPtr && !CapacityData.EnemiesIndex.Contains(*EnemyIndexPtr))
+		if ( !CapacityData.EnemiesIndex.Contains(Result.Item))
 		{
-			CapacityData.EnemiesIndex.Add(*EnemyIndexPtr);
+			CapacityData.EnemiesIndex.Add(Result.Item);
 		}
 	}
 

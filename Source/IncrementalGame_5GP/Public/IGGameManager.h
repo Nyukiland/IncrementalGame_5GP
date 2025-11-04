@@ -65,8 +65,6 @@ public:
 	TArray<FEnemyData> EnemiesData;
 	UPROPERTY()
 	TArray<int32> ActiveEnemiesIndices;
-	UPROPERTY()
-	TMap<int32, int32> InstanceIdToEnemyIndex;
 
 	UPROPERTY(BlueprintAssignable, Category = "Enemy")
 	FOnEnemyDeath OnEnemyDeath;

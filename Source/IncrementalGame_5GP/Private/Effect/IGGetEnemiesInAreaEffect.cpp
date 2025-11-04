@@ -53,10 +53,11 @@ void UIGGetEnemiesInAreaEffect::ApplyEffect_Implementation(FCapacityData& Capaci
 		UInstancedStaticMeshComponent* ISM = Cast<UInstancedStaticMeshComponent>(Result.Component);
 		if (!ISM) continue;
 
-		int32* EnemyIndexPtr = CapacityData.Manager->InstanceIdToEnemyIndex.Find(Result.Item);
-		if (EnemyIndexPtr && !CapacityData.EnemiesIndex.Contains(*EnemyIndexPtr))
+		UE_LOG(LogTemp, Error, TEXT("Parent: %s / Index: %d"), *ISM->GetOuter()->GetName(), Result.Item);
+		
+		if (!CapacityData.EnemiesIndex.Contains(Result.Item))
 		{
-			CapacityData.EnemiesIndex.Add(*EnemyIndexPtr);
+			CapacityData.EnemiesIndex.Add(Result.Item);
 		}
 	}
 

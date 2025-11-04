@@ -9,11 +9,12 @@ void FEnemyData::ApplyDamage(float Damage)
 	{
 		Damage *= Status.DamageMultiplier;
 	}
-	
+
 	Health -= Damage;
 
-	
-	if (Health <= 0) bIsDead = true;
+
+	if (Health <= 0)
+		bIsDead = true;
 }
 
 void FEnemyData::SetActive(bool bNewActive)
@@ -37,10 +38,13 @@ void FEnemyData::SetActive(bool bNewActive)
 		if (InactiveEnemiesIndices->Contains(InstanceId))
 			InactiveEnemiesIndices->Remove(InstanceId);
 	}
-	else if (ActiveEnemiesIndices->Contains(InstanceId))
-		ActiveEnemiesIndices->Remove(InstanceId);
-	if (!InactiveEnemiesIndices->Contains(InstanceId))
-		InactiveEnemiesIndices->Add(InstanceId);
+	else
+	{
+		if (ActiveEnemiesIndices->Contains(InstanceId))
+			ActiveEnemiesIndices->Remove(InstanceId);
+		if (!InactiveEnemiesIndices->Contains(InstanceId))
+			InactiveEnemiesIndices->Add(InstanceId);
+	}
 
 	if (bNewActive)
 		bIsDead = false;
@@ -58,7 +62,6 @@ void FEnemyData::Init(FVector Origin, float BaseHealth, FVector BaseDirection, f
 	LookAtRotation.Yaw += 90.f;
 	Transform.SetRotation(LookAtRotation.Quaternion());
 
-	
 	SetActive(true);
 }
 
@@ -84,9 +87,9 @@ void FEnemyData::UpdatePosition(float DeltaTime, int32& TempInstanceId, FTransfo
 		if (Statuses[i].UpdateStatus(DeltaTime, Damage, DecreaseSpeed))
 		{
 			FName StatusName = Statuses[i].Name;
-			
+
 			Statuses.RemoveAt(i);
-			
+
 			StatusCount[StatusName]--;
 			if (StatusCount[StatusName] == 0)
 			{
@@ -96,7 +99,7 @@ void FEnemyData::UpdatePosition(float DeltaTime, int32& TempInstanceId, FTransfo
 	}
 
 	ApplyDamage(Damage);
-	
+
 	float ElapsedDistance = DeltaTime * FMath::Clamp(Speed * DecreaseSpeed, 0, Speed);
 	DistanceFromOrigin += ElapsedDistance;
 	Transform.AddToTranslation(Direction * ElapsedDistance);
@@ -109,7 +112,7 @@ void FEnemyData::UpdatePosition(float DeltaTime, int32& TempInstanceId, FTransfo
 void FEnemyData::AddStatus(FStatus NewStatus)
 {
 	FName StatusName = NewStatus.Name;
-	
+
 	if (NewStatus.bCanStack || !StatusCount.Contains(StatusName))
 	{
 		Statuses.Add(NewStatus);

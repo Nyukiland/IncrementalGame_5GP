@@ -61,7 +61,7 @@ bool FProjectileData::Update(float DeltaTime, FVector& CurrentPos, FVector& Curr
 
 	CurrentRotation = Rotation;
 	
-	return Timer > Duration + Hold;
+	return Timer < Duration + Hold;
 }
 
 void UIGProjectileManagerComponent::InitStateComponent_Implementation(AIGPlayer* Controller)
@@ -94,6 +94,8 @@ void UIGProjectileManagerComponent::InitStateComponent_Implementation(AIGPlayer*
 		UE_LOG(LogTemp, Error, TEXT("[IGProjectileManagerComponent] ProjectileVisu or BaseMaterial not properly set up"));
 		return;
 	}
+
+	ProjectileMeshInstances->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void UIGProjectileManagerComponent::EnableStateComponent_Implementation()

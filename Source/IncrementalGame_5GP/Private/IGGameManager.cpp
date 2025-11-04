@@ -5,9 +5,11 @@
 #include "IGMathHelper.h"
 #include "Components/InstancedStaticMeshComponent.h"
 
-void UIGGameManager::InitializeManager(UInstancedStaticMeshComponent* EnemiesMeshInstancesVar, UIGMathEquations* EnemyLifeVar,
-		UIGMathEquations* EnemySpeedVar, UIGMathEquations* EnemySpawnVar, UIGMathEquations* ZoneVar,
-		float ZoneMaxRadiusVar, float ZoneMinRadiusVar, int InvincibilityFrameVar)
+void UIGGameManager::InitializeManager(UInstancedStaticMeshComponent* EnemiesMeshInstancesVar,
+                                       UIGMathEquations* EnemyLifeVar,
+                                       UIGMathEquations* EnemySpeedVar, UIGMathEquations* EnemySpawnVar,
+                                       UIGMathEquations* ZoneVar,
+                                       float ZoneMaxRadiusVar, float ZoneMinRadiusVar, int InvincibilityFrameVar)
 {
 	EnemiesMeshInstances = EnemiesMeshInstancesVar;
 	EnemyHealth = EnemyLifeVar;
@@ -18,10 +20,10 @@ void UIGGameManager::InitializeManager(UInstancedStaticMeshComponent* EnemiesMes
 	MaxZoneRadius = ZoneMaxRadiusVar;
 	MinZoneRadius = ZoneMinRadiusVar;
 	MaxZoneFrameInvincibility = InvincibilityFrameVar;
-	
+
 	CurrentZoneFrameInvincibility = MaxZoneFrameInvincibility;
 	CurrentZoneRadius = MaxZoneRadius;
-	
+
 	FString NullParams;
 
 	if (!EnemiesMeshInstances)
@@ -50,7 +52,7 @@ void UIGGameManager::Tick(float DeltaTime)
 		return;
 
 	bool ZoneInvincibility = false;
-	
+
 	if (CurrentZoneFrameInvincibility < MaxZoneFrameInvincibility)
 	{
 		CurrentZoneFrameInvincibility++;
@@ -67,9 +69,9 @@ void UIGGameManager::Tick(float DeltaTime)
 		Transform.SetRotation(FQuat(FRotator(0, 0, 0)));
 		Transform.SetLocation(FVector(0, 0, 0));
 		SpawnEnemy(Transform);
-		Timer = 0;	
+		Timer = 0;
 	}
-	
+
 	if (!EnemiesMeshInstances) return;
 
 	ClosestEnemyIndex = -1;
@@ -79,37 +81,32 @@ void UIGGameManager::Tick(float DeltaTime)
 
 	for (int i = 0; i < EnemiesData.Num(); i++)
 	{
+		UE_LOG(LogTemp, Error, TEXT("index: %d"), i);
+		UE_LOG(LogTemp, Error, TEXT("active: %d"), EnemiesData[i].IsActive());
+		UE_LOG(LogTemp, Error, TEXT("dead: %d"), EnemiesData[i].bIsDead);
+		
 		if (!EnemiesData[i].IsActive())
 			continue;
 
 		if (EnemiesData[i].bIsDead)
 		{
 			OnEnemyDeath.Broadcast(EnemiesData[i].Transform.GetLocation());
-
-			FTransform HiddenTransform;
-			HiddenTransform.SetLocation(FVector(0, 0, -100000.0f));
-			HiddenTransform.SetScale3D(FVector::ZeroVector); 
-			EnemiesMeshInstances->UpdateInstanceTransform(EnemiesData[i].InstanceId, HiddenTransform, true, true, true);
-			EnemiesData[i].Kill();
+			KillEnemy(i);
 
 			continue;
 		}
 
 		if (EnemiesData[i].DistanceFromOrigin >= CurrentZoneRadius)
 		{
-			FTransform HiddenTransform;
-			HiddenTransform.SetLocation(FVector(0, 0, -100000.0f));
-			HiddenTransform.SetScale3D(FVector::ZeroVector); 
-			EnemiesMeshInstances->UpdateInstanceTransform(EnemiesData[i].InstanceId, HiddenTransform, true, true, true);
-			EnemiesData[i].Kill();
-			
+			KillEnemy(i);
+
 			if (!ZoneInvincibility)
 			{
 				ChangeZoneSize(DecreaseZoneCurve->GetValue(TimerScale));
 			}
 			continue;
 		}
-		
+
 		int32 EnemyInstanceId;
 		FTransform EnemyTransform;
 		float EnemyDistanceFromOrigin;
@@ -143,16 +140,25 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 	}
 
 	if (!EnemiesMeshInstances) return INDEX_NONE;
-	
+
 	int32 NewEnemyIndex;
+	int32 InstanceId;
 	if (InactiveEnemiesIndices.Num() <= 0)
+	{
 		// New enemy
 		NewEnemyIndex = EnemiesData.AddDefaulted();
+		InstanceId = EnemiesMeshInstances->AddInstance(SpawnTransform);
+		EnemiesData[NewEnemyIndex].InstanceId = InstanceId;
+		UE_LOG(LogTemp, Error, TEXT("Created Instance Id: %d"), InstanceId);
+	}
 	else
+	{
 		// Pooled enemy
 		NewEnemyIndex = InactiveEnemiesIndices.Pop();
+		InstanceId = EnemiesData[NewEnemyIndex].InstanceId;
+		UE_LOG(LogTemp, Error, TEXT("Pooled Instance Id: %d"), InstanceId);
+	}
 
-	int32 InstanceId = EnemiesMeshInstances->AddInstance(SpawnTransform);
 	if (InstanceId < 0)
 	{
 		// failure, we put the index back into inactives
@@ -169,21 +175,23 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 	NewEnemyData.InactiveEnemiesIndices = &InactiveEnemiesIndices;
 	NewEnemyData.EnemiesData = &EnemiesData;
 	NewEnemyData.Init(FVector::Zero() + BaseDirection, EnemyHealth->GetValue(TimerScale), BaseDirection,
-		EnemySpeed->GetValue(TimerScale), InstanceId);
+	                  EnemySpeed->GetValue(TimerScale), InstanceId);
 
 	EnemiesMeshInstances->UpdateInstanceTransform(InstanceId, NewEnemyData.Transform, true, true, true);
-	InstanceIdToEnemyIndex.Add(InstanceId, NewEnemyIndex);
 
 	return InstanceId;
 }
 
 void UIGGameManager::KillEnemy(int EnemyIndex)
 {
-	FEnemyData EnemyToKill = GetEnemy(EnemyIndex);
-	int32 InstanceId = EnemyToKill.InstanceId;
-	EnemiesMeshInstances->RemoveInstance(EnemyToKill.InstanceId);
-	InstanceIdToEnemyIndex.Remove(InstanceId);
-	EnemyToKill.Kill();
+	UE_LOG(LogTemp, Error, TEXT("EnemyKilled"));
+
+	FTransform HiddenTransform;
+	HiddenTransform.SetLocation(FVector(0, 0, -100000.0f));
+	HiddenTransform.SetScale3D(FVector::ZeroVector);
+	EnemiesMeshInstances->
+		UpdateInstanceTransform(EnemiesData[EnemyIndex].InstanceId, HiddenTransform, true, true, true);
+	EnemiesData[EnemyIndex].Kill();
 }
 
 uint32 UIGGameManager::GetFarthestEnemy() const
@@ -239,10 +247,6 @@ void UIGGameManager::ResetManager()
 	{
 		if (!EnemiesData[i].IsActive()) continue;
 
-		FTransform HiddenTransform;
-		HiddenTransform.SetLocation(FVector(0, 0, -100000.0f));
-		HiddenTransform.SetScale3D(FVector::ZeroVector); 
-		EnemiesMeshInstances->UpdateInstanceTransform(EnemiesData[i].InstanceId, HiddenTransform, true, true, true);
-		EnemiesData[i].Kill();
+		KillEnemy(i);
 	}
 }

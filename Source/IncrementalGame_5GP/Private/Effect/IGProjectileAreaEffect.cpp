@@ -13,5 +13,5 @@ void UIGProjectileAreaEffect::ApplyEffect_Implementation(FCapacityData& Capacity
 	}
 
 	CapacityData.ProjectileManager->AddProjectile(CapacityData.CurrentAimPositon, CapacityData.LastAreaSize,
-		Duration, Color); 
+		ProjectileTime, Color); 
 }

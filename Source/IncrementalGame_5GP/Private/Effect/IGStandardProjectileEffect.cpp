@@ -12,6 +12,9 @@ void UIGStandardProjectileEffect::ApplyEffect_Implementation(FCapacityData& Capa
 		return;
 	}
 
+	if (CapacityData.PreviousAimPosition == CapacityData.CurrentAimPositon)
+		return;
+	
 	CapacityData.ProjectileManager->AddProjectile(CapacityData.PreviousAimPosition, CapacityData.CurrentAimPositon,
-		Duration, Color); 
+		ProjectileTime, Color); 
 }
