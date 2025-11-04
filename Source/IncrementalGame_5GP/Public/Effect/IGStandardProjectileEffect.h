@@ -15,6 +15,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 	float ProjectileTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+	float ProjectileSize;
 	
 public:
 	virtual void ApplyEffect_Implementation(FCapacityData& CapacityData) override;

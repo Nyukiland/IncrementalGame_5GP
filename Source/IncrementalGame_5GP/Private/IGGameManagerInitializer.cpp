@@ -28,6 +28,7 @@ void AIGGameManagerInitializer::BeginPlay()
 	UInstancedStaticMeshComponent* EnemiesMeshInstances = NewObject<UInstancedStaticMeshComponent>(this);
 	EnemiesMeshInstances->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 	EnemiesMeshInstances->RegisterComponent();
+	EnemiesMeshInstances->NumCustomDataFloats = 3;
 
 	if (PlaneMesh)
 	{

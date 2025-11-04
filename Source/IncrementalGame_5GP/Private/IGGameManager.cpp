@@ -65,9 +65,9 @@ void UIGGameManager::Tick(float DeltaTime)
 	if (Timer > SpawnRateCurve->GetValue(TimerScale))
 	{
 		FTransform Transform;
-		Transform.SetScale3D(FVector(1, 1, 1));
+		Transform.SetScale3D(FVector::One() * 0.5f);
 		Transform.SetRotation(FQuat(FRotator(0, 0, 0)));
-		Transform.SetLocation(FVector(0, 0, 0));
+		Transform.SetLocation(FVector::Zero());
 		SpawnEnemy(Transform);
 		Timer = 0;
 	}
@@ -81,10 +81,6 @@ void UIGGameManager::Tick(float DeltaTime)
 
 	for (int i = 0; i < EnemiesData.Num(); i++)
 	{
-		UE_LOG(LogTemp, Error, TEXT("index: %d"), i);
-		UE_LOG(LogTemp, Error, TEXT("active: %d"), EnemiesData[i].IsActive());
-		UE_LOG(LogTemp, Error, TEXT("dead: %d"), EnemiesData[i].bIsDead);
-		
 		if (!EnemiesData[i].IsActive())
 			continue;
 
@@ -110,7 +106,12 @@ void UIGGameManager::Tick(float DeltaTime)
 		int32 EnemyInstanceId;
 		FTransform EnemyTransform;
 		float EnemyDistanceFromOrigin;
-		EnemiesData[i].UpdatePosition(DeltaTime, EnemyInstanceId, EnemyTransform, EnemyDistanceFromOrigin);
+		FColor Color = FColor::White;
+		EnemiesData[i].UpdatePosition(DeltaTime, EnemyInstanceId, EnemyTransform, EnemyDistanceFromOrigin, Color);
+
+		EnemiesMeshInstances->SetCustomDataValue(i, 0, Color.R / 255.0f, false);
+		EnemiesMeshInstances->SetCustomDataValue(i, 1, Color.G / 255.0f, false);
+		EnemiesMeshInstances->SetCustomDataValue(i, 2, Color.B / 255.0f, false);
 		EnemiesMeshInstances->UpdateInstanceTransform(EnemyInstanceId, EnemyTransform, true, true, true);
 
 		if (EnemyDistanceFromOrigin < ClosestEnemyDistance)
@@ -149,14 +150,12 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 		NewEnemyIndex = EnemiesData.AddDefaulted();
 		InstanceId = EnemiesMeshInstances->AddInstance(SpawnTransform);
 		EnemiesData[NewEnemyIndex].InstanceId = InstanceId;
-		UE_LOG(LogTemp, Error, TEXT("Created Instance Id: %d"), InstanceId);
 	}
 	else
 	{
 		// Pooled enemy
 		NewEnemyIndex = InactiveEnemiesIndices.Pop();
 		InstanceId = EnemiesData[NewEnemyIndex].InstanceId;
-		UE_LOG(LogTemp, Error, TEXT("Pooled Instance Id: %d"), InstanceId);
 	}
 
 	if (InstanceId < 0)
@@ -184,8 +183,6 @@ int32 UIGGameManager::SpawnEnemy(const FTransform& SpawnTransform)
 
 void UIGGameManager::KillEnemy(int EnemyIndex)
 {
-	UE_LOG(LogTemp, Error, TEXT("EnemyKilled"));
-
 	FTransform HiddenTransform;
 	HiddenTransform.SetLocation(FVector(0, 0, -100000.0f));
 	HiddenTransform.SetScale3D(FVector::ZeroVector);

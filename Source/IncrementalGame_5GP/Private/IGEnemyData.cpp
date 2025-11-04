@@ -1,8 +1,10 @@
 #include "IGEnemyData.h"
 
+#include "MaterialHLSLTree.h"
+
 void FEnemyData::ApplyDamage(float Damage)
 {
-	if (Health <= 0)
+	if (Health <= 0 || Damage <= 0)
 		return;
 
 	for (FStatus Status : Statuses)
@@ -11,7 +13,7 @@ void FEnemyData::ApplyDamage(float Damage)
 	}
 
 	Health -= Damage;
-
+	DamageTimer = 0;
 
 	if (Health <= 0)
 		bIsDead = true;
@@ -77,13 +79,17 @@ void FEnemyData::Kill()
 }
 
 void FEnemyData::UpdatePosition(float DeltaTime, int32& TempInstanceId, FTransform& TempTransform,
-                                float& TempDistanceFromOrigin)
+                                float& TempDistanceFromOrigin, FColor& Color)
 {
+	Color = FColor::White;
 	float Damage = 0;
 	float DecreaseSpeed = 1;
 
 	for (int i = Statuses.Num() - 1; i >= 0; i--)
 	{
+		if (Statuses[i].Color != FColor::White)
+			Color = Statuses[i].Color;
+		
 		if (Statuses[i].UpdateStatus(DeltaTime, Damage, DecreaseSpeed))
 		{
 			FName StatusName = Statuses[i].Name;
@@ -96,6 +102,12 @@ void FEnemyData::UpdatePosition(float DeltaTime, int32& TempInstanceId, FTransfo
 				StatusCount.Remove(StatusName);
 			}
 		}
+	}
+	
+	if (DamageTimer < 0.25f)
+	{
+		DamageTimer += DeltaTime;
+		Color = FColor::Red;
 	}
 
 	ApplyDamage(Damage);

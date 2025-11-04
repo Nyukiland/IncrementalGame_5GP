@@ -18,6 +18,8 @@ private:
 	FVector Direction = FVector(0, 0, 0);
 	float Speed = 0;
 
+	float DamageTimer = 0.25f;
+	
 public:
 	FTransform Transform;
 	
@@ -43,6 +45,7 @@ public:
 	bool IsActive() const { return bIsActive_Internal; }
 	void Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed, int32 InstanceId);
 	void Kill();
-	void UpdatePosition(float DeltaTime, int32& InstanceId, FTransform& Transform, float& EnemyDistanceFromOrigin);
+	void UpdatePosition(float DeltaTime, int32& InstanceId, FTransform& Transform,
+		float& EnemyDistanceFromOrigin, FColor& Color);
 	void AddStatus(FStatus NewStatus);
 };

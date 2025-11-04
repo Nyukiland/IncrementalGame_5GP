@@ -20,7 +20,7 @@ FProjectileData::FProjectileData()
 	Hold = 0;
 }
 
-FProjectileData::FProjectileData(int InstanceIndex, FVector Start, FVector End, float DurationValue)
+FProjectileData::FProjectileData(int InstanceIndex, FVector Start, FVector End, float Size, float DurationValue)
 {
 	Instance = InstanceIndex;
 	StartPos = Start;
@@ -31,8 +31,8 @@ FProjectileData::FProjectileData(int InstanceIndex, FVector Start, FVector End, 
 	Rotation = UKismetMathLibrary::FindLookAtRotation(Start, End);
 	
 	Hold = 0;
-	StartScale = FVector(1, 1, 1);
-	EndScale = FVector(1, 1, 1);
+	StartScale = FVector::One() * Size;
+	EndScale = FVector::One() * Size;
 }
 
 FProjectileData::FProjectileData(int InstanceIndex, FVector Start, FVector End, FVector ScaleStart,
@@ -136,7 +136,7 @@ void UIGProjectileManagerComponent::ResetComponent_Implementation()
 	ProjectilesDatas.Empty();
 }
 
-void UIGProjectileManagerComponent::AddProjectile(FVector Start, FVector End, float DurationValue, FColor Color)
+void UIGProjectileManagerComponent::AddProjectile(FVector Start, FVector End, float Size, float DurationValue, FColor Color)
 {
 	int32 Index;
 
@@ -156,7 +156,7 @@ void UIGProjectileManagerComponent::AddProjectile(FVector Start, FVector End, fl
 
 	ProjectileMeshInstances->MarkRenderStateDirty();
 
-	FProjectileData Data(Index, Start, End, DurationValue);
+	FProjectileData Data(Index, Start, End, Size, DurationValue);
 	ProjectilesDatas.Add(Data);
 }
 

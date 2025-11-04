@@ -11,6 +11,9 @@ struct FStatus
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Status")
 	FName Name;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Status")
+	FColor Color;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Status")
 	bool bOneShot = false;
