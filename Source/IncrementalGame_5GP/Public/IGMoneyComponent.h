@@ -12,7 +12,7 @@ class INCREMENTALGAME_5GP_API UIGMoneyComponent : public UIGStateComponent
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "MoneyComponent")
+	UPROPERTY()
 	TObjectPtr<UIGStatContainer> MoneyPerKill;
 
 protected:

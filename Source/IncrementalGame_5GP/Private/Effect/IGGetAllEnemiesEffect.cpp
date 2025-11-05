@@ -17,5 +17,6 @@ void UIGGetAllEnemiesEffect::ApplyEffect_Implementation(FCapacityData& CapacityD
 			continue;
 
 		CapacityData.EnemiesIndex.Add(Enemy);
+		CapacityData.LastAreaSize = 10000; //BigNumber
 	}
 }

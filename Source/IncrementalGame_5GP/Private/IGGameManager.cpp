@@ -114,12 +114,13 @@ void UIGGameManager::Tick(float DeltaTime)
 		EnemiesMeshInstances->SetCustomDataValue(i, 2, Color.B / 255.0f, false);
 		EnemiesMeshInstances->UpdateInstanceTransform(EnemyInstanceId, EnemyTransform, true, true, true);
 
+
 		if (EnemyDistanceFromOrigin < ClosestEnemyDistance)
 		{
 			ClosestEnemyDistance = EnemyDistanceFromOrigin;
 			ClosestEnemyIndex = i;
 		}
-		else if (EnemyDistanceFromOrigin > FarthestEnemyDistance)
+		if (EnemyDistanceFromOrigin > FarthestEnemyDistance)
 		{
 			FarthestEnemyDistance = EnemyDistanceFromOrigin;
 			FarthestEnemyIndex = i;

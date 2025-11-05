@@ -138,29 +138,38 @@ void UIGProjectileManagerComponent::ResetComponent_Implementation()
 
 void UIGProjectileManagerComponent::AddProjectile(FVector Start, FVector End, float Size, float DurationValue, FColor Color)
 {
-	int32 Index;
-
-	if (AvailableInstanceIndices.Num() > 0)
-	{
-		Index = AvailableInstanceIndices.Pop();
-		ProjectileMeshInstances->UpdateInstanceTransform(Index, FTransform(Start), false, true);
-	}
-	else
-	{
-		Index = ProjectileMeshInstances->AddInstance(FTransform(Start));
-	}
-
-	ProjectileMeshInstances->SetCustomDataValue(Index, 0, Color.R / 255.0f, false);
-	ProjectileMeshInstances->SetCustomDataValue(Index, 1, Color.G / 255.0f, false);
-	ProjectileMeshInstances->SetCustomDataValue(Index, 2, Color.B / 255.0f, false);
-
-	ProjectileMeshInstances->MarkRenderStateDirty();
+	int32 Index = CreateGetProjectile(FTransform(Start), Color);
 
 	FProjectileData Data(Index, Start, End, Size, DurationValue);
 	ProjectilesDatas.Add(Data);
 }
 
 void UIGProjectileManagerComponent::AddProjectile(FVector Pos, float EndScale, float DurationValue, FColor Color)
+{
+	int32 Index = CreateGetProjectile(FTransform(Pos), Color);
+
+	FProjectileData Data(Index, Pos, Pos, FVector::Zero(), FVector(EndScale, EndScale, EndScale), DurationValue, 0);
+	ProjectilesDatas.Add(Data);
+}
+
+void UIGProjectileManagerComponent::AddProjectile(FVector Start, float SideScale, FVector End, float DurationValue,
+	FColor Color)
+{
+	int32 Index = CreateGetProjectile(FTransform(Start), Color);
+
+	FVector Dir = End - Start;
+	float Length = Dir.Length();
+
+	FVector StartPos = Start;
+	FVector EndPos = Start + Dir * 0.5f;
+	FVector StartScale = FVector(0.0f, SideScale, 1.0f);
+	FVector EndScale = FVector(Length * 0.01f, SideScale, 1.0f);
+
+	FProjectileData Data(Index, StartPos, EndPos, StartScale, EndScale, DurationValue, 0);
+	ProjectilesDatas.Add(Data);
+}
+
+int UIGProjectileManagerComponent::CreateGetProjectile(FTransform Pos, FColor Color)
 {
 	int32 Index;
 
@@ -180,6 +189,5 @@ void UIGProjectileManagerComponent::AddProjectile(FVector Pos, float EndScale, f
 
 	ProjectileMeshInstances->MarkRenderStateDirty();
 
-	FProjectileData Data(Index, Pos, Pos, FVector::Zero(), FVector(EndScale, EndScale, EndScale), DurationValue, 0);
-	ProjectilesDatas.Add(Data);
+	return Index;
 }

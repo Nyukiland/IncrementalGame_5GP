@@ -9,12 +9,11 @@ void UIGMoneyComponent::InitStateComponent_Implementation(AIGPlayer* Controller)
 	Super::InitStateComponent_Implementation(Controller);
 
 	Controller->GetWorld()->GetSubsystem<UIGGameManager>()->OnEnemyDeath.AddDynamic(this, &UIGMoneyComponent::OnEnemyDeath);
-
-
+	
 	if (MoneyPerKillSubClass)
 	{
-	MoneyPerKill = NewObject<UIGStatContainer>(this, MoneyPerKillSubClass);
-	MoneyPerKill->Init();
+		MoneyPerKill = NewObject<UIGStatContainer>(this, MoneyPerKillSubClass);
+		MoneyPerKill->Init();
 	}
 	else
 	{

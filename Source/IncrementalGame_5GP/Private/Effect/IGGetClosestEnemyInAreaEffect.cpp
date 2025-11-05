@@ -45,18 +45,29 @@ void UIGGetClosestEnemyInAreaEffect::ApplyEffect_Implementation(FCapacityData& C
 		Params
 	);
 
+	int ClosestEnemyIndex = -1;
+	float ClosestEnemyDistance = BIG_NUMBER;
+	
 	for (const FHitResult& Result : HitResults)
 	{
 		UInstancedStaticMeshComponent* ISM = Cast<UInstancedStaticMeshComponent>(Result.Component);
 		if (!ISM) continue;
 
-		if ( !CapacityData.EnemiesIndex.Contains(Result.Item))
+		float Dist = FVector::Dist(Result.ImpactPoint, CapacityData.CurrentAimPositon);
+		
+		if (ClosestEnemyIndex == -1 || Dist < ClosestEnemyDistance)
 		{
-			CapacityData.EnemiesIndex.Add(Result.Item);
+			ClosestEnemyIndex = Result.Item;
+			ClosestEnemyDistance = Dist;
 		}
 	}
 
-	CapacityData.LastAreaSize = Area->CurrentValue;
+	if (ClosestEnemyIndex != -1 && !CapacityData.EnemiesIndex.Contains(ClosestEnemyIndex))
+	{
+		CapacityData.EnemiesIndex.Add(ClosestEnemyIndex);
+		CapacityData.PreviousAimPosition = CapacityData.CurrentAimPositon;
+		CapacityData.CurrentAimPositon = CapacityData.Manager->GetEnemy(ClosestEnemyIndex).Transform.GetLocation();
+	}
 }
 
 TArray<UIGStatContainer*> UIGGetClosestEnemyInAreaEffect::GetStats_Implementation()

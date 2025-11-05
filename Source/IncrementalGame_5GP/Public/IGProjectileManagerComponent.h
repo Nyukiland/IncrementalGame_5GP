@@ -66,4 +66,7 @@ public:
 
 	void AddProjectile(FVector Start, FVector End, float Size, float DurationValue, FColor Color);
 	void AddProjectile(FVector Pos, float EndScale, float DurationValue, FColor Color);
+	void AddProjectile(FVector Start, float SideScale, FVector End, float DurationValue, FColor Color);
+
+	int CreateGetProjectile(FTransform Pos, FColor Color);
 };
