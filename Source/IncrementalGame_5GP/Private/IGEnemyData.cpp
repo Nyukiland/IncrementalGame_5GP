@@ -55,10 +55,12 @@ void FEnemyData::SetActive(bool bNewActive)
 void FEnemyData::Init(FVector Origin, float BaseHealth, FVector BaseDirection, float BaseSpeed, int32 BaseInstanceId)
 {
 	Transform.SetLocation(Origin);
+	Transform.SetScale3D(FVector::One() * 0.5f);
 	Health = BaseHealth;
 	Direction = BaseDirection;
 	Speed = BaseSpeed;
 	InstanceId = BaseInstanceId;
+	DistanceFromOrigin = 0;
 
 	FRotator LookAtRotation = Direction.Rotation();
 	LookAtRotation.Yaw += 90.f;
@@ -73,7 +75,6 @@ void FEnemyData::Kill()
 	Health = 0;
 	Direction = FVector::ZeroVector;
 	Speed = 0;
-	InstanceId = -1;
 
 	SetActive(false);
 }

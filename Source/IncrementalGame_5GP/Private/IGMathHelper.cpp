@@ -2,7 +2,6 @@
 
 FVector UIGMathHelper::GetRandomPointInCircle()
 {
-	float RandomX = FMath::RandRange(-1, 1);
-	float RandomY = FMath::RandRange(-1, 1);
-	return FVector(RandomX, RandomY, 0).GetSafeNormal(); 
+	float Angle = FMath::RandRange(0.0f, 2 * PI);
+	return FVector(FMath::Cos(Angle), FMath::Sin(Angle), 0);
 }

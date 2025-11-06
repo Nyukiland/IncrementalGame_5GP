@@ -65,7 +65,7 @@ void UIGGameManager::Tick(float DeltaTime)
 	if (Timer > SpawnRateCurve->GetValue(TimerScale))
 	{
 		FTransform Transform;
-		Transform.SetScale3D(FVector::One() * 0.5f);
+		Transform.SetScale3D(FVector::One());
 		Transform.SetRotation(FQuat(FRotator(0, 0, 0)));
 		Transform.SetLocation(FVector::Zero());
 		SpawnEnemy(Transform);
