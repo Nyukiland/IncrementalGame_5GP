@@ -29,8 +29,8 @@ void UIGHealEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 		UE_LOG(LogTemp, Error, TEXT("[HealEffect] Manager is not set in the data"));
 		return;
 	}
-	
-	CapacityData.Manager->ChangeZoneSize(HealStat->CurrentValue);
+
+	CapacityData.Manager->ChangeZoneSize(HealStat->CurrentValue * CapacityData.Manager->GetWorld()->GetDeltaSeconds());
 }
 
 TArray<UIGStatContainer*> UIGHealEffect::GetStats_Implementation()

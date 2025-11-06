@@ -32,9 +32,11 @@ void UIGRepeatEffect::InitEffect_Implementation()
 		UIGCapacityEffect* Effect = NewObject<UIGCapacityEffect>(this, EffectSubClass);
 		Effect->InitEffect();
 		Effects.Add(Effect);
-
-		Duration += Effect->Duration;
 	}
+	
+	Duration = BIG_NUMBER;
+	Duration--;
+	Timer = 0;
 }
 
 void UIGRepeatEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
@@ -48,8 +50,11 @@ void UIGRepeatEffect::ApplyEffect_Implementation(FCapacityData& CapacityData)
 	
 	if (ExecuteEffect(CapacityData))
 	{
-		if (LoopIndex == RepeatStat->CurrentValue)
+		if (LoopIndex >= RepeatStat->CurrentValue)
+		{
 			Timer = BIG_NUMBER;
+			LoopIndex = 0;
+		}
 		else
 			LoopIndex++;
 		
@@ -120,6 +125,8 @@ bool UIGRepeatEffect::ExecuteEffect(FCapacityData& CapacityData)
 		else
 			Effect->Timer += DeltaTime;
 
+		UE_LOG(LogTemp, Error, TEXT("here"))
+		
 		Effect->ApplyEffect(CapacityData);
 		return false;
 	}

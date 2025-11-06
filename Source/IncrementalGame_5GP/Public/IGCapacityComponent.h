@@ -36,10 +36,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Capacity")
 	float Price;
 
-	UPROPERTY()
+	UPROPERTY(visibleAnywhere, BlueprintReadOnly, Category = "Capacity")
 	TArray<TObjectPtr<UIGCapacityTrigger>> Triggers;
 
-	UPROPERTY()
+	UPROPERTY(visibleAnywhere, BlueprintReadOnly, Category = "Capacity")
 	TArray<TObjectPtr<UIGCapacityEffect>> Effects;
 
 public:
