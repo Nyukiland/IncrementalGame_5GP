@@ -61,6 +61,7 @@ void AIGPlayer::BeginPlay()
 	if (UIGGameManager* GameManager = GetWorld()->GetSubsystem<UIGGameManager>())
 	{
 		GameManager->OnEnemyDeath.AddDynamic(this, &AIGPlayer::IncreaseKillCount);
+		GameManager->OnLoose.AddDynamic(this, &AIGPlayer::ResetGame);
 	}
 }
 
@@ -157,14 +158,13 @@ bool AIGPlayer::CheckSlotFull()
 
 void AIGPlayer::UpgradePrestige()
 {
-	ResetGame(CurrentPrestige + 1);
+	CurrentPrestige += 1;
+	ResetGame();
 }
 
-void AIGPlayer::ResetGame(int NewPrestige)
+void AIGPlayer::ResetGame()
 {
 	GetWorld()->GetSubsystem<UIGGameManager>()->ResetManager();
-	
-	CurrentPrestige = NewPrestige;
 
 	if (PrestigeKillNeededMath)
 		PrestigeKillNeeded = PrestigeKillNeededMath->GetValue(CurrentPrestige);

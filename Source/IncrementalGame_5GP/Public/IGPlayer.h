@@ -86,7 +86,7 @@ public:
 	void UpgradePrestige();
 	
 	UFUNCTION(BlueprintCallable, Category = "Player")
-	void ResetGame(int NewPrestige);
+	void ResetGame();
 
 private:
 	UFUNCTION()
