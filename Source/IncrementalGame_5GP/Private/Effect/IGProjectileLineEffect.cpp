@@ -16,5 +16,5 @@ void UIGProjectileLineEffect::ApplyEffect_Implementation(FCapacityData& Capacity
 		return;
 	
 	CapacityData.ProjectileManager->AddProjectile(CapacityData.PreviousAimPosition, ProjectileSize,
-		CapacityData.CurrentAimPositon, ProjectileTime, Color); 
+		CapacityData.CurrentAimPositon, ProjectileTime, ProjectileHold, Color); 
 }

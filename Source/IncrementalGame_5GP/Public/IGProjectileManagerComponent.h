@@ -27,7 +27,7 @@ private:
 	
 public:
 	FProjectileData();
-	FProjectileData(int InstanceIndex, FVector Start, FVector End, float Size, float DurationValue);
+	FProjectileData(int InstanceIndex, FVector Start, FVector End, float Size, float DurationValue, float HoldValue);
 	FProjectileData(int InstanceIndex, FVector Start, FVector End, FVector ScaleStart, FVector ScaleEnd, float DurationValue, float HoldValue);
 
 	bool Update(float DeltaTime, FVector& CurrentPos, FVector& CurrentScale, FRotator& CurrentRotation);
@@ -64,9 +64,9 @@ public:
 	virtual void TickStateComponent_Implementation(float DeltaTime) override;
 	virtual void ResetComponent_Implementation() override;
 
-	void AddProjectile(FVector Start, FVector End, float Size, float DurationValue, FColor Color);
-	void AddProjectile(FVector Pos, float EndScale, float DurationValue, FColor Color);
-	void AddProjectile(FVector Start, float SideScale, FVector End, float DurationValue, FColor Color);
+	void AddProjectile(FVector Start, FVector End, float Size, float DurationValue, float Hold, FColor Color);
+	void AddProjectile(FVector Pos, float EndScale, float DurationValue, float Hold, FColor Color);
+	void AddProjectile(FVector Start, float SideScale, FVector End, float DurationValue, float Hold, FColor Color);
 
 	int CreateGetProjectile(FTransform Pos, FColor Color);
 };

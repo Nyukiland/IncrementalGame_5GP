@@ -125,8 +125,6 @@ bool UIGRepeatEffect::ExecuteEffect(FCapacityData& CapacityData)
 		else
 			Effect->Timer += DeltaTime;
 
-		UE_LOG(LogTemp, Error, TEXT("here"))
-		
 		Effect->ApplyEffect(CapacityData);
 		return false;
 	}

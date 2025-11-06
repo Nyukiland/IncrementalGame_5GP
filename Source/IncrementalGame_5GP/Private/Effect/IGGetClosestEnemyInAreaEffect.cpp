@@ -53,6 +53,9 @@ void UIGGetClosestEnemyInAreaEffect::ApplyEffect_Implementation(FCapacityData& C
 		UInstancedStaticMeshComponent* ISM = Cast<UInstancedStaticMeshComponent>(Result.Component);
 		if (!ISM) continue;
 
+		if (CapacityData.EnemiesIndex.Contains(Result.Item))
+			continue;
+			
 		float Dist = FVector::Dist(Result.ImpactPoint, CapacityData.CurrentAimPositon);
 		
 		if (ClosestEnemyIndex == -1 || Dist < ClosestEnemyDistance)

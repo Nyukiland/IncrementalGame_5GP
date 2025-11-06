@@ -20,7 +20,7 @@ FProjectileData::FProjectileData()
 	Hold = 0;
 }
 
-FProjectileData::FProjectileData(int InstanceIndex, FVector Start, FVector End, float Size, float DurationValue)
+FProjectileData::FProjectileData(int InstanceIndex, FVector Start, FVector End, float Size, float DurationValue, float HoldValue)
 {
 	Instance = InstanceIndex;
 	StartPos = Start;
@@ -30,7 +30,7 @@ FProjectileData::FProjectileData(int InstanceIndex, FVector Start, FVector End, 
 	Timer = 0;
 	Rotation = UKismetMathLibrary::FindLookAtRotation(Start, End);
 	
-	Hold = 0;
+	Hold = HoldValue;
 	StartScale = FVector::One() * Size;
 	EndScale = FVector::One() * Size;
 }
@@ -136,23 +136,23 @@ void UIGProjectileManagerComponent::ResetComponent_Implementation()
 	ProjectilesDatas.Empty();
 }
 
-void UIGProjectileManagerComponent::AddProjectile(FVector Start, FVector End, float Size, float DurationValue, FColor Color)
+void UIGProjectileManagerComponent::AddProjectile(FVector Start, FVector End, float Size, float DurationValue, float Hold, FColor Color)
 {
 	int32 Index = CreateGetProjectile(FTransform(Start), Color);
 
-	FProjectileData Data(Index, Start, End, Size, DurationValue);
+	FProjectileData Data(Index, Start, End, Size, DurationValue, Hold);
 	ProjectilesDatas.Add(Data);
 }
 
-void UIGProjectileManagerComponent::AddProjectile(FVector Pos, float EndScale, float DurationValue, FColor Color)
+void UIGProjectileManagerComponent::AddProjectile(FVector Pos, float EndScale, float DurationValue, float Hold, FColor Color)
 {
 	int32 Index = CreateGetProjectile(FTransform(Pos), Color);
 
-	FProjectileData Data(Index, Pos, Pos, FVector::Zero(), FVector(EndScale, EndScale, EndScale), DurationValue, 0);
+	FProjectileData Data(Index, Pos, Pos, FVector::Zero(), FVector(EndScale, EndScale, EndScale), DurationValue, Hold);
 	ProjectilesDatas.Add(Data);
 }
 
-void UIGProjectileManagerComponent::AddProjectile(FVector Start, float SideScale, FVector End, float DurationValue,
+void UIGProjectileManagerComponent::AddProjectile(FVector Start, float SideScale, FVector End, float DurationValue, float Hold,
 	FColor Color)
 {
 	int32 Index = CreateGetProjectile(FTransform(Start), Color);
@@ -165,7 +165,7 @@ void UIGProjectileManagerComponent::AddProjectile(FVector Start, float SideScale
 	FVector StartScale = FVector(0.0f, SideScale, 1.0f);
 	FVector EndScale = FVector(Length * 0.01f, SideScale, 1.0f);
 
-	FProjectileData Data(Index, StartPos, EndPos, StartScale, EndScale, DurationValue, 0);
+	FProjectileData Data(Index, StartPos, EndPos, StartScale, EndScale, DurationValue, Hold);
 	ProjectilesDatas.Add(Data);
 }
 
