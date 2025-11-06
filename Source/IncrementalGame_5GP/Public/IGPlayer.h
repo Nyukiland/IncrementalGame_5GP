@@ -27,6 +27,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
 	int CurrentPrestige;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
+	int KillCount;
 	
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player")
@@ -71,10 +74,10 @@ public:
 	void DeactivateStateComponent(UIGStateComponent* Comp, int Index);
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
-	void CallOnEvent(const FString& Value);
+	void CallOnEvent(FString Value);
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
-	bool CheckPrestigeUpgrade(int KillCount);
+	bool CheckPrestigeUpgrade(int PrestigeKillCount);
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
 	bool CheckSlotFull();
@@ -84,4 +87,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Player")
 	void ResetGame(int NewPrestige);
+
+private:
+	UFUNCTION()
+	void IncreaseKillCount(const FVector& Value);
 };

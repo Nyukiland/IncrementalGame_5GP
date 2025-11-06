@@ -57,6 +57,11 @@ void AIGPlayer::BeginPlay()
 		if (StateComponents[i])
 			StateComponents[i]->EnableStateComponent();
 	}
+
+	if (UIGGameManager* GameManager = GetWorld()->GetSubsystem<UIGGameManager>())
+	{
+		GameManager->OnEnemyDeath.AddDynamic(this, &AIGPlayer::IncreaseKillCount);
+	}
 }
 
 void AIGPlayer::Tick(float DeltaTime)
@@ -135,14 +140,14 @@ void AIGPlayer::DeactivateStateComponent(UIGStateComponent* Comp, int Index)
 	ActiveComponentCount--;
 }
 
-void AIGPlayer::CallOnEvent(const FString& Value)
+void AIGPlayer::CallOnEvent(FString Value)
 {
 	OnEventCalled.Broadcast(Value);
 }
 
-bool AIGPlayer::CheckPrestigeUpgrade(int KillCount)
+bool AIGPlayer::CheckPrestigeUpgrade(int PrestigeKillCount)
 {
-	return KillCount >= PrestigeKillNeeded;
+	return PrestigeKillCount >= PrestigeKillNeeded;
 }
 
 bool AIGPlayer::CheckSlotFull()
@@ -185,4 +190,9 @@ void AIGPlayer::ResetGame(int NewPrestige)
 			}
 		}
 	}
+}
+
+void AIGPlayer::IncreaseKillCount(const FVector& Value)
+{
+	KillCount++;
 }

@@ -93,6 +93,7 @@ void UIGCapacityComponent::InitStateComponent_Implementation(AIGPlayer* Controll
 
 void UIGCapacityComponent::EnableStateComponent_Implementation()
 {
+	Super::EnableStateComponent_Implementation();
 	CapacityData.Manager = Owner->GetWorld()->GetSubsystem<UIGGameManager>();
 	CapacityData.Player = Owner;
 	
@@ -103,6 +104,7 @@ void UIGCapacityComponent::EnableStateComponent_Implementation()
 
 void UIGCapacityComponent::DisableStateComponent_Implementation()
 {
+	Super::DisableStateComponent_Implementation();
 }
 
 void UIGCapacityComponent::TickStateComponent_Implementation(float DeltaTime)

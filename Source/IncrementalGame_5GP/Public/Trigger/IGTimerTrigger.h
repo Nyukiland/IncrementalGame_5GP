@@ -17,7 +17,7 @@ protected:
 	float Timer = 0;
 
 public:
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UIGStatContainer> MaxTimer;
 	
 public:
