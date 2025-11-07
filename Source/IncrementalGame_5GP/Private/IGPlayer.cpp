@@ -200,6 +200,11 @@ void AIGPlayer::ResetGame()
 	KillCount = 0;
 }
 
+float AIGPlayer::GetCurrentPrestigeNeeded()
+{
+	return PrestigeKillNeeded;
+}
+
 void AIGPlayer::IncreaseKillCount(const FVector& Value)
 {
 	KillCount++;

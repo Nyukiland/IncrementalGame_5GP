@@ -31,23 +31,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
 	int KillCount;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
 	float PrestigeKillNeeded;
 	
-protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player")
 	TSubclassOf<UIGMathEquations> PrestigeKillNeededMathSubClass;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player")
 	TSubclassOf<UIGMathEquations> SlotCountMathSubClass;
 	
-private:
 	int ActiveComponentCount = 0;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
 	TObjectPtr<UIGMathEquations> PrestigeKillNeededMath;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
 	TObjectPtr<UIGMathEquations> SlotCountMath;
 
 	UPROPERTY()
@@ -87,6 +86,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Player")
 	void ResetGame();
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
+	float GetCurrentPrestigeNeeded();
 
 private:
 	UFUNCTION()

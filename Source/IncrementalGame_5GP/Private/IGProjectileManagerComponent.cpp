@@ -134,6 +134,7 @@ void UIGProjectileManagerComponent::TickStateComponent_Implementation(float Delt
 void UIGProjectileManagerComponent::ResetComponent_Implementation()
 {
 	ProjectilesDatas.Empty();
+	ProjectileMeshInstances->ClearInstances();
 }
 
 void UIGProjectileManagerComponent::AddProjectile(FVector Start, FVector End, float Size, float DurationValue, float Hold, FColor Color)
