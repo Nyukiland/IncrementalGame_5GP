@@ -119,7 +119,8 @@ void AIGPlayer::ActivateStateComponent(UIGStateComponent* Comp, int Index)
 	if (!Comp || Index < 0 || Index > StateComponents.Num())
 		return;
 
-	StateComponents.Swap(Index, ActiveComponentCount);
+	if (ActiveComponentCount < StateComponents.Num())
+		StateComponents.Swap(Index, ActiveComponentCount);
 	Comp->EnableStateComponent();
 	ActiveComponentCount++;
 }
@@ -135,7 +136,7 @@ void AIGPlayer::DeactivateStateComponent(UIGStateComponent* Comp, int Index)
 {
 	if (!Comp || Index < 0 || Index > StateComponents.Num())
 		return;
-
+	
 	StateComponents.Swap(Index, ActiveComponentCount - 1);
 	Comp->DisableStateComponent();
 	ActiveComponentCount--;
