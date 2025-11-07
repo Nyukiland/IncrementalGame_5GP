@@ -195,6 +195,8 @@ void AIGPlayer::ResetGame()
 		if (ShouldReset)
 			DeactivateStateComponent(Component, i);
 	}
+
+	KillCount = 0;
 }
 
 void AIGPlayer::IncreaseKillCount(const FVector& Value)

@@ -31,6 +31,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")
 	int KillCount;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float PrestigeKillNeeded;
+	
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Player")
 	TSubclassOf<UIGMathEquations> PrestigeKillNeededMathSubClass;
@@ -46,9 +49,6 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UIGMathEquations> SlotCountMath;
-	
-	UPROPERTY()
-	float PrestigeKillNeeded;
 
 	UPROPERTY()
 	int MaxSlotCount;
