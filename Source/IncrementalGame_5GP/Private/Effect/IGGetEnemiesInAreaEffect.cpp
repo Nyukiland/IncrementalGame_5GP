@@ -59,7 +59,7 @@ void UIGGetEnemiesInAreaEffect::ApplyEffect_Implementation(FCapacityData& Capaci
 		}
 	}
 
-	CapacityData.LastAreaSize = AreaSize->CurrentValue;
+	CapacityData.LastAreaSize = AreaSize->CurrentValue/2;
 }
 
 TArray<UIGStatContainer*> UIGGetEnemiesInAreaEffect::GetStats_Implementation()

@@ -181,14 +181,19 @@ void AIGPlayer::ResetGame()
 		
 		Component->ResetComponent();
 
+		bool ShouldReset = true;
+		
 		for (TSubclassOf<UIGStateComponent> DefaultComp : DefaultActiveComponent)
 		{
-			if (!Component->IsA(DefaultComp))
+			if (Component->IsA(DefaultComp))
 			{
-				DeactivateStateComponent(Component, i);
+				ShouldReset = false;
 				break;
 			}
 		}
+
+		if (ShouldReset)
+			DeactivateStateComponent(Component, i);
 	}
 }
 
